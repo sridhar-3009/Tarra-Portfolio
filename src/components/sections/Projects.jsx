@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FiGithub, FiExternalLink, FiX, FiStar, FiArrowRight, FiCode } from 'react-icons/fi'
@@ -9,6 +9,60 @@ import { projects, categories } from '../../data/projects'
 import { modalBackdrop, modalContent } from '../../animations/variants'
 
 gsap.registerPlugin(ScrollTrigger)
+
+// ── Infinite scroll marquee ───────────────────────────────────────────────────
+function ProjectMarquee({ items }) {
+  const trackRef = useRef(null)
+  const rafRef = useRef(null)
+  const xRef = useRef(0)
+  const speedRef = useRef(0.6)
+  const lastScrollY = useRef(window.scrollY)
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    const totalW = track.scrollWidth / 2
+
+    const tick = () => {
+      // Boost speed on scroll
+      const dy = window.scrollY - lastScrollY.current
+      lastScrollY.current = window.scrollY
+      speedRef.current = Math.max(0.6, Math.min(4, 0.6 + Math.abs(dy) * 0.08))
+      speedRef.current *= 0.96 // decay back to base
+
+      xRef.current -= speedRef.current
+      if (Math.abs(xRef.current) >= totalW) xRef.current = 0
+      track.style.transform = `translateX(${xRef.current}px)`
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [])
+
+  const doubled = [...items, ...items]
+
+  return (
+    <div className="overflow-hidden w-full mb-14 -mx-4 px-0" style={{ maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)' }}>
+      <div ref={trackRef} className="flex gap-4 w-max will-change-transform">
+        {doubled.map((p, i) => (
+          <div
+            key={`${p.id}-${i}`}
+            className="flex-shrink-0 glass rounded-xl border border-white/5 px-5 py-3 flex items-center gap-3 hover:border-purple-500/30 transition-colors duration-200 cursor-default"
+            style={{ minWidth: 220 }}
+          >
+            <div
+              className="w-2 h-2 rounded-full flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg,#8B5CF6,#06B6D4)', boxShadow: '0 0 8px #8B5CF660' }}
+            />
+            <span className="text-white text-sm font-semibold truncate">{p.title}</span>
+            <span className="text-zinc-600 text-xs flex-shrink-0">{p.category}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 // ── 3D Tilt card wrapper ──────────────────────────────────────────────────────
 // perspective must be on the PARENT so rotation of the child looks correct
@@ -343,6 +397,9 @@ export default function Projects() {
             <p className="text-zinc-500 text-xs">Projects</p>
           </motion.div>
         </div>
+
+        {/* Marquee */}
+        <ProjectMarquee items={projects} />
 
         {/* Filter tabs */}
         <motion.div

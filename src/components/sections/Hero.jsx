@@ -5,6 +5,7 @@ import { FiArrowRight, FiGithub } from 'react-icons/fi'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import MagneticButton from '../ui/MagneticButton'
+import NeuralCanvas from '../ui/NeuralCanvas'
 import { personal } from '../../data/personal'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -294,7 +295,7 @@ export default function Hero() {
     >
       {/* Background layers */}
       <MeshBlobs mouseX={mouseX} mouseY={mouseY} />
-      <ParticleField />
+      <NeuralCanvas />
       <MouseSpotlight containerRef={containerRef} />
 
       {/* Content */}
