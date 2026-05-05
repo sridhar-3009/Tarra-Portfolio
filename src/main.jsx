@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import App from './App'
 import './styles/globals.css'
+import { ThemeProvider } from './context/ThemeContext'
 
 // Register GSAP plugins globally
 import gsap from 'gsap'
@@ -13,7 +14,9 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HelmetProvider>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </HelmetProvider>
   </React.StrictMode>
 )

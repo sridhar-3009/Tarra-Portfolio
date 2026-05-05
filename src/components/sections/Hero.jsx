@@ -6,6 +6,7 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import MagneticButton from '../ui/MagneticButton'
 import NeuralCanvas from '../ui/NeuralCanvas'
+import { useTheme } from '../../context/ThemeContext'
 import { personal } from '../../data/personal'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -254,6 +255,7 @@ function HeroHeadline() {
 
 // ── Main Export ───────────────────────────────────────────────────────────────
 export default function Hero() {
+  const { theme } = useTheme()
   const containerRef = useRef(null)
   const mouseXRaw = useMotionValue(0)
   const mouseYRaw = useMotionValue(0)
@@ -295,7 +297,7 @@ export default function Hero() {
     >
       {/* Background layers */}
       <MeshBlobs mouseX={mouseX} mouseY={mouseY} />
-      <NeuralCanvas />
+      {theme === 'neural' && <NeuralCanvas />}
       <MouseSpotlight containerRef={containerRef} />
 
       {/* Content */}

@@ -17,6 +17,63 @@
   --color-muted: #71717A;
   --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --transition-spring: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Theme accent tokens — updated by ThemeContext */
+  --accent-1: #8B5CF6;
+  --accent-2: #06B6D4;
+}
+
+/* ─── Theme: Space ───────────────────────────────────────────────────────── */
+[data-theme='space'] body {
+  background-color: #050510;
+}
+[data-theme='space'] ::-webkit-scrollbar-track { background: #050510; }
+[data-theme='space'] .gradient-text {
+  background: linear-gradient(135deg, #818CF8 0%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-theme='space'] .scroll-progress,
+[data-theme='space'] .reading-progress {
+  background: linear-gradient(90deg, #818CF8, #F59E0B);
+}
+
+/* ─── Theme: Matrix ──────────────────────────────────────────────────────── */
+[data-theme='matrix'] body {
+  background-color: #010802;
+}
+[data-theme='matrix'] ::-webkit-scrollbar-track { background: #010802; }
+[data-theme='matrix'] .gradient-text {
+  background: linear-gradient(135deg, #00FF41 0%, #00CC33 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-theme='matrix'] .scroll-progress,
+[data-theme='matrix'] .reading-progress {
+  background: linear-gradient(90deg, #00FF41, #00CC33);
+}
+[data-theme='matrix'] ::selection {
+  background-color: rgba(0, 255, 65, 0.25);
+}
+
+/* ─── Theme: Ocean ───────────────────────────────────────────────────────── */
+[data-theme='ocean'] body {
+  background-color: #020916;
+}
+[data-theme='ocean'] ::-webkit-scrollbar-track { background: #020916; }
+[data-theme='ocean'] .gradient-text {
+  background: linear-gradient(135deg, #22D3EE 0%, #0EA5E9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-theme='ocean'] .scroll-progress,
+[data-theme='ocean'] .reading-progress {
+  background: linear-gradient(90deg, #22D3EE, #0EA5E9);
+}
+[data-theme='ocean'] ::selection {
+  background-color: rgba(34, 211, 238, 0.25);
 }
 
 /* ─── Base Reset & Defaults ─────────────────────────────────────────────── */
