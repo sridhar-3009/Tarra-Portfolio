@@ -34,6 +34,7 @@ export default function OceanCanvas() {
       }
     }
 
+    resize()
     for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(spawnParticle(false))
 
     // Wave lines — horizontal sinusoidal bands
@@ -77,13 +78,16 @@ export default function OceanCanvas() {
         const alpha = alphaPeak * pulse * 0.7
 
         // Glow
-        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4)
-        glow.addColorStop(0, `hsla(${p.hue}, ${p.sat}%, 75%, ${alpha})`)
-        glow.addColorStop(1, `hsla(${p.hue}, ${p.sat}%, 75%, 0)`)
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2)
-        ctx.fillStyle = glow
-        ctx.fill()
+        const glowR = p.r * 4
+        if (isFinite(p.x) && isFinite(p.y) && glowR > 0) {
+          const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR)
+          glow.addColorStop(0, `hsla(${p.hue}, ${p.sat}%, 75%, ${alpha})`)
+          glow.addColorStop(1, `hsla(${p.hue}, ${p.sat}%, 75%, 0)`)
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, glowR, 0, Math.PI * 2)
+          ctx.fillStyle = glow
+          ctx.fill()
+        }
 
         // Core dot
         ctx.beginPath()
