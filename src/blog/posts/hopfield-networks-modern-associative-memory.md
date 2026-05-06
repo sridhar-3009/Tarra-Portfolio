@@ -38,8 +38,6 @@ Building a mathematical model of this was John Hopfield's goal in 1982.
 
 Imagine N light switches arranged in a grid. Each switch is either ON (+1) or OFF (-1). Every switch is connected to every other switch by a wire with a weight on it. The whole thing is fully connected, symmetric (the weight from switch A to B equals the weight from B to A), and has no self-connections.
 
-![Hopfield network topology — every node connects to every other node](/blog/hopfield-network-topology.png)
-
 This is the Hopfield network. The state of the system at any moment is the pattern of ON/OFF switches — a vector $\mathbf{s} = [s_1, s_2, \ldots, s_N]$ where each $s_i \in \{-1, +1\}$.
 
 ### The Energy Function
@@ -64,17 +62,9 @@ $$w_{ij} = \frac{1}{N} \sum_{\mu=1}^{p} \xi_i^\mu \xi_j^\mu$$
 
 ### The Energy Landscape as Terrain
 
-Here's the visual that makes this click:
-
-![Energy landscape showing basins of attraction — valleys are stored memories](/blog/hopfield-energy-landscape.png)
-
 Think of the energy landscape as a mountainous terrain. Each valley is a stored memory — a stable fixed point the system is attracted to. Corrupted or partial inputs are hikers dropped somewhere on a hillside. The update rule is gravity: the hiker slides downhill and settles in the nearest valley, retrieving the closest stored memory.
 
 Give the network a photo of a face with half the pixels blacked out. It slides down to the nearest energy minimum — the fully-complete stored face. The gap gets filled.
-
-This is how it looks in practice — the network converging from a noisy start state to a stored pattern:
-
-![Hopfield network dynamics: converging from noise to stored pattern](/blog/hopfield-dynamics.gif)
 
 ### Retrieval in Action
 
@@ -109,10 +99,6 @@ The second failure mode is subtler and stranger: **spurious attractors** — ene
 The most common type is a **mixture state**. If you store patterns $\boldsymbol{\xi}^1$, $\boldsymbol{\xi}^2$, $\boldsymbol{\xi}^3$, the vector $\text{sign}(\boldsymbol{\xi}^1 + \boldsymbol{\xi}^2 - \boldsymbol{\xi}^3)$ is often also a stable minimum. It's not a real memory — it's a hallucination, a weighted blend of three real ones.
 
 Another guaranteed spurious state: $-\boldsymbol{\xi}^\mu$. The bitwise inverse of every stored pattern is always also a stable fixed point.
-
-This is the ghost memory problem:
-
-![Hopfield network converging to a spurious (incorrect) attractor instead of a stored pattern](/blog/hopfield-spurious.gif)
 
 The network converges — but to somewhere that was never stored. The hiker finds a phantom valley that shouldn't exist.
 
@@ -166,8 +152,6 @@ patterns with exponentially small retrieval error.
 For $N = 100$ dimensions: classical capacity ≈ 14 patterns. Modern capacity ≈ $2^{50} \approx 10^{15}$ patterns.
 
 The reason: with exponential interaction, each stored pattern carves out a deep, narrow basin. Even when you pack in $2^{N/2}$ patterns, the basins stay separated. Spurious states essentially vanish because the network almost always converges in **a single update step** directly to the closest true memory.
-
-![Modern Hopfield network architecture — continuous states, exponential capacity](/blog/modern-hopfield-network.png)
 
 ---
 
