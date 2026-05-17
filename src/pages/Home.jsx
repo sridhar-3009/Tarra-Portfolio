@@ -7,6 +7,7 @@ import Skills from '../components/sections/Skills'
 import Projects from '../components/sections/Projects'
 import Experience from '../components/sections/Experience'
 import Testimonials from '../components/sections/Testimonials'
+import NewsletterBanner from '../components/sections/NewsletterBanner'
 import Contact from '../components/sections/Contact'
 import { personal } from '../data/personal'
 
@@ -44,6 +45,7 @@ export default function Home() {
       <Projects />
       <Experience />
       <Testimonials />
+      <NewsletterBanner />
       <Contact />
     </>
   )
