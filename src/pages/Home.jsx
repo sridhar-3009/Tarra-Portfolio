@@ -36,7 +36,7 @@ export default function Home() {
         <meta name="description" content={`${personal.name} — ${personal.title}. ${personal.bio}`} />
         <meta property="og:title" content={`${personal.name} | ML & AI Engineer`} />
         <meta property="og:description" content={personal.bio} />
-        <link rel="canonical" href="https://saisridhartarra.com/" />
+        <link rel="canonical" href="https://saisridhartarra.in/" />
       </Helmet>
 
       <Hero />

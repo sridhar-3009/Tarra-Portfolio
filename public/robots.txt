@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://saisridhartarra.com/sitemap.xml
+Sitemap: https://saisridhartarra.in/sitemap.xml

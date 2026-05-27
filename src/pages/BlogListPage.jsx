@@ -127,11 +127,11 @@ export default function BlogListPage() {
         <meta property="og:title" content="AI & ML Blog | Sai Sridhar Tarra" />
         <meta property="og:description" content="Deep dives on transformers, LLMs, memory models, neuroscience AI, and modern ML systems." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://saisridhartarra.com/blog" />
+        <meta property="og:url" content="https://saisridhartarra.in/blog" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:title" content="AI & ML Blog | Sai Sridhar Tarra" />
         <meta property="twitter:description" content="Deep dives on transformers, LLMs, memory models, and modern ML systems." />
-        <link rel="canonical" href="https://saisridhartarra.com/blog" />
+        <link rel="canonical" href="https://saisridhartarra.in/blog" />
       </Helmet>
 
       <div className="relative min-h-screen pt-28 pb-24">

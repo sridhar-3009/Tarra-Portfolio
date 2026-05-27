@@ -27,7 +27,7 @@ export default defineConfig({
   plugins: [
     react(),
     sitemap({
-      hostname: 'https://saisridhartarra.com',
+      hostname: 'https://saisridhartarra.in',
       dynamicRoutes: [
         '/',
         '/blog',

@@ -177,7 +177,7 @@ export default function BlogPostPage() {
   )
 
   const headings = extractHeadings(post.content)
-  const pageUrl = `https://saisridhartarra.com/blog/${post.slug}`
+  const pageUrl = `https://saisridhartarra.in/blog/${post.slug}`
 
   return (
     <>
@@ -209,12 +209,12 @@ export default function BlogPostPage() {
           "author": {
             "@type": "Person",
             "name": "Sai Sridhar Tarra",
-            "url": "https://saisridhartarra.com"
+            "url": "https://saisridhartarra.in"
           },
           "publisher": {
             "@type": "Person",
             "name": "Sai Sridhar Tarra",
-            "url": "https://saisridhartarra.com"
+            "url": "https://saisridhartarra.in"
           },
           "mainEntityOfPage": {
             "@type": "WebPage",

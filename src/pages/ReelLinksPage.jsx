@@ -97,10 +97,10 @@ export default function ReelLinksPage() {
         <meta property="og:title" content="Code Drops — ML Projects & Tools | Sai Sridhar Tarra" />
         <meta property="og:description" content="Open-source projects, tools, and experiments in ML, AI, automation, and full-stack development." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://saisridhartarra.com/code-drops" />
+        <meta property="og:url" content="https://saisridhartarra.in/code-drops" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:title" content="Code Drops — ML Projects & Tools | Sai Sridhar Tarra" />
-        <link rel="canonical" href="https://saisridhartarra.com/code-drops" />
+        <link rel="canonical" href="https://saisridhartarra.in/code-drops" />
       </Helmet>
 
       <div className="relative min-h-screen pt-28 pb-24">
