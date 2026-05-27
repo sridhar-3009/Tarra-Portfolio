@@ -188,10 +188,42 @@ export default function BlogPostPage() {
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={pageUrl} />
+        <meta property="og:site_name" content="Sai Sridhar Tarra" />
+        <meta property="article:author" content="Sai Sridhar Tarra" />
+        <meta property="article:published_time" content={post.date} />
+        <meta property="article:section" content={post.category} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content={post.title} />
+        <meta property="twitter:description" content={post.excerpt} />
         {post.tags.map((tag) => (
           <meta key={tag} property="article:tag" content={tag} />
         ))}
         <link rel="canonical" href={pageUrl} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": post.title,
+          "description": post.excerpt,
+          "url": pageUrl,
+          "datePublished": post.date,
+          "author": {
+            "@type": "Person",
+            "name": "Sai Sridhar Tarra",
+            "url": "https://saisridhartarra.com"
+          },
+          "publisher": {
+            "@type": "Person",
+            "name": "Sai Sridhar Tarra",
+            "url": "https://saisridhartarra.com"
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": pageUrl
+          },
+          "keywords": post.tags.join(', '),
+          "articleSection": post.category,
+          "inLanguage": "en-US"
+        })}</script>
       </Helmet>
 
       <ReadingProgress />
@@ -301,7 +333,7 @@ export default function BlogPostPage() {
                     Data Analyst & ML Engineer. Passionate about building intelligent systems, time-series forecasting, and production AI.
                   </p>
                   <div className="flex gap-3">
-                    <a href="https://github.com/sai-sridhar-repo-07" target="_blank" rel="noopener noreferrer" className="text-purple-400 text-xs hover:text-purple-300 transition-colors">GitHub ↗</a>
+                    <a href="https://github.com/sridhar-3009" target="_blank" rel="noopener noreferrer" className="text-purple-400 text-xs hover:text-purple-300 transition-colors">GitHub ↗</a>
                     <a href="https://linkedin.com/in/saisridhartarra" target="_blank" rel="noopener noreferrer" className="text-purple-400 text-xs hover:text-purple-300 transition-colors">LinkedIn ↗</a>
                   </div>
                 </div>

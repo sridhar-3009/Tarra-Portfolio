@@ -122,8 +122,16 @@ export default function BlogListPage() {
   return (
     <>
       <Helmet>
-        <title>Blog | Sai Sridhar Tarra — ML & AI Engineer</title>
-        <meta name="description" content="Thoughts on machine learning, AI research, and building production AI systems." />
+        <title>AI & ML Blog | Sai Sridhar Tarra</title>
+        <meta name="description" content="Deep dives on transformers, LLMs, memory models, neuroscience AI, and modern ML systems — written by an ML engineer." />
+        <meta property="og:title" content="AI & ML Blog | Sai Sridhar Tarra" />
+        <meta property="og:description" content="Deep dives on transformers, LLMs, memory models, neuroscience AI, and modern ML systems." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://saisridhartarra.com/blog" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content="AI & ML Blog | Sai Sridhar Tarra" />
+        <meta property="twitter:description" content="Deep dives on transformers, LLMs, memory models, and modern ML systems." />
+        <link rel="canonical" href="https://saisridhartarra.com/blog" />
       </Helmet>
 
       <div className="relative min-h-screen pt-28 pb-24">
