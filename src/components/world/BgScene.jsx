@@ -134,7 +134,7 @@ function NeuralNet({ position }) {
       ))}
       <lineSegments>
         <bufferGeometry ref={lineRef} />
-        <lineBasicMaterial color="#00E5A040" />
+        <lineBasicMaterial color="#00E5A0" transparent opacity={0.22} />
       </lineSegments>
     </group>
   )
@@ -233,7 +233,7 @@ function ExperienceSpiral({ position }) {
         object={
           new THREE.Line(
             lineGeom,
-            new THREE.LineBasicMaterial({ color: '#ffffff20' })
+            new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.12 })
           )
         }
       />
