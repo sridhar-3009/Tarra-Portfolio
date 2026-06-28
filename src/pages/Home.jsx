@@ -1,5 +1,5 @@
-import World3D from '../components/world/World3D'
+import ImmersiveHome from './ImmersiveHome'
 
 export default function Home() {
-  return <World3D />
+  return <ImmersiveHome />
 }
