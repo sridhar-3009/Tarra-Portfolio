@@ -47,6 +47,7 @@ function AppRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
+        {/* Home: full-screen design with its own nav/footer */}
         <Route
           path="/"
           element={
@@ -55,44 +56,55 @@ function AppRoutes() {
             </PageTransition>
           }
         />
+        {/* All other routes wrapped in shared Layout */}
         <Route
           path="/blog"
           element={
-            <PageTransition>
-              <BlogListPage />
-            </PageTransition>
+            <Layout>
+              <PageTransition>
+                <BlogListPage />
+              </PageTransition>
+            </Layout>
           }
         />
         <Route
           path="/blog/:slug"
           element={
-            <PageTransition>
-              <BlogPostPage />
-            </PageTransition>
+            <Layout>
+              <PageTransition>
+                <BlogPostPage />
+              </PageTransition>
+            </Layout>
           }
         />
         <Route
           path="/code-drops"
           element={
-            <PageTransition>
-              <ReelLinksPage />
-            </PageTransition>
+            <Layout>
+              <PageTransition>
+                <ReelLinksPage />
+              </PageTransition>
+            </Layout>
           }
         />
         <Route
           path="/code-drops/:slug"
           element={
-            <PageTransition>
-              <ReelLinkDetailPage />
-            </PageTransition>
+            <Layout>
+              <PageTransition>
+                <ReelLinkDetailPage />
+              </PageTransition>
+            </Layout>
           }
         />
         <Route
           path="*"
           element={
-            <PageTransition>
-              <NotFound />
-            </PageTransition>
+            <Layout>
+              <PageTransition>
+                <NotFound />
+              </PageTransition>
+            </Layout>
           }
         />
       </Routes>
@@ -106,16 +118,11 @@ export default function App() {
 
   return (
     <>
-      {/* Loading screen — shows before app renders */}
       {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
-
-      {/* Main application */}
       <BrowserRouter>
-        <Layout>
-          <Suspense fallback={<PageLoader />}>
-            <AppRoutes />
-          </Suspense>
-        </Layout>
+        <Suspense fallback={<PageLoader />}>
+          <AppRoutes />
+        </Suspense>
       </BrowserRouter>
     </>
   )
