@@ -55,46 +55,11 @@ function AppRoutes() {
             </PageTransition>
           }
         />
-        <Route
-          path="/blog"
-          element={
-            <PageTransition>
-              <BlogListPage />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/blog/:slug"
-          element={
-            <PageTransition>
-              <BlogPostPage />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/code-drops"
-          element={
-            <PageTransition>
-              <ReelLinksPage />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/code-drops/:slug"
-          element={
-            <PageTransition>
-              <ReelLinkDetailPage />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <PageTransition>
-              <NotFound />
-            </PageTransition>
-          }
-        />
+        <Route path="/blog" element={<Layout><PageTransition><BlogListPage /></PageTransition></Layout>} />
+        <Route path="/blog/:slug" element={<Layout><PageTransition><BlogPostPage /></PageTransition></Layout>} />
+        <Route path="/code-drops" element={<Layout><PageTransition><ReelLinksPage /></PageTransition></Layout>} />
+        <Route path="/code-drops/:slug" element={<Layout><PageTransition><ReelLinkDetailPage /></PageTransition></Layout>} />
+        <Route path="*" element={<Layout><PageTransition><NotFound /></PageTransition></Layout>} />
       </Routes>
     </AnimatePresence>
   )
@@ -109,13 +74,10 @@ export default function App() {
       {/* Loading screen — shows before app renders */}
       {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
 
-      {/* Main application */}
       <BrowserRouter>
-        <Layout>
-          <Suspense fallback={<PageLoader />}>
-            <AppRoutes />
-          </Suspense>
-        </Layout>
+        <Suspense fallback={<PageLoader />}>
+          <AppRoutes />
+        </Suspense>
       </BrowserRouter>
     </>
   )
