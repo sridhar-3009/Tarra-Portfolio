@@ -15,7 +15,7 @@ I'm the founder of MailAir — an AI-powered email assistant that uses LLMs and 
 
 Currently a free agent, focused on open source contributions and building in the open. My interests lie in large language models, MLOps, and backend systems. I continuously explore research papers from NeurIPS and ICML, and build projects that push the boundary between research and production.`,
   stats: [
-    { label: 'Years Experience', value: 1, suffix: '+', },
+    { label: 'Years Experience', value: 2, suffix: '+', },
     { label: 'Projects Built', value: 5, suffix: '+', },
     { label: 'Problems Solved (DSA)', value: 1000, suffix: '+', },
     { label: 'Papers Read', value: 10, suffix: '+', },
