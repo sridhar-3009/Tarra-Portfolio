@@ -1,3 +1,4 @@
+import GitHubStats from '../components/sections/GitHubStats'
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -490,6 +491,7 @@ export default function NetflixHome() {
       </div>
 
       <About />
+      <GitHubStats accentColor="#E50914" dark={true} />
       <Footer />
     </div>
   )
