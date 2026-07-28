@@ -3,15 +3,15 @@ import { motion, useInView } from 'framer-motion'
 
 const USERNAME = 'sridhar-3009'
 
-const STATS_URL = `https://github-readme-stats.vercel.app/api?username=${USERNAME}&show_icons=true&theme=dark&bg_color=0d1117&title_color=00FF88&icon_color=00FF88&text_color=ffffff&border_color=21262d&count_private=true&include_all_commits=true&rank_icon=github&hide_border=false`
+const STATS_URL = `https://github-readme-stats.vercel.app/api?username=${USERNAME}&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&hide_border=true&bg_color=1a1b27&title_color=70a5fd&icon_color=bf91f3&text_color=38bdae`
 
-const LANGS_URL = `https://github-readme-stats.vercel.app/api/top-langs/?username=${USERNAME}&layout=compact&theme=dark&bg_color=0d1117&title_color=00FF88&text_color=ffffff&border_color=21262d&langs_count=8&hide=html,css,scss`
+const LANGS_URL = `https://github-readme-stats.vercel.app/api/top-langs/?username=${USERNAME}&layout=compact&langs_count=8&theme=tokyonight&hide_border=true&bg_color=1a1b27&title_color=70a5fd&text_color=38bdae&hide=html,css,scss`
 
-const STREAK_URL = `https://streak-stats.demolab.com/?user=${USERNAME}&theme=dark&background=0d1117&border=21262d&stroke=00FF88&ring=00FF88&fire=FF6B00&currStreakNum=ffffff&sideNums=ffffff&currStreakLabel=00FF88&sideLabels=888888&dates=555555`
+const STREAK_URL = `https://streak-stats.demolab.com?user=${USERNAME}&theme=tokyonight&hide_border=true&background=1A1B27&stroke=70a5fd&ring=bf91f3&fire=FF6B00&currStreakNum=38bdae&sideNums=38bdae&currStreakLabel=70a5fd&sideLabels=888888&dates=555555`
 
-const TROPHY_URL = `https://github-profile-trophy.vercel.app/?username=${USERNAME}&theme=darkhub&no-frame=true&no-bg=true&margin-w=6&column=6`
+const TROPHY_URL = `https://github-profile-trophy.vercel.app/?username=${USERNAME}&theme=tokyonight&no-frame=true&no-bg=true&margin-w=8&column=6`
 
-const GRAPH_URL = `https://github-readme-activity-graph.vercel.app/graph?username=${USERNAME}&bg_color=0d1117&color=00FF88&line=00FF88&point=FF6B00&area=true&area_color=00FF8820&hide_border=true`
+const GRAPH_URL = `https://github-readme-activity-graph.vercel.app/graph?username=${USERNAME}&theme=tokyo-night&hide_border=true&area=true`
 
 export default function GitHubStats({ accentColor = '#00FF88', dark = true }) {
   const ref = useRef()
