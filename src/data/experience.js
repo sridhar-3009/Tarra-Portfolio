@@ -6,7 +6,7 @@ export const experiences = [
     companyUrl: 'https://www.accenture.com',
     period: 'Nov 2023 – Jul 2026',
     duration: '2 yrs 8 months',
-    location: 'Coimbatore, India',
+    location: 'Bengaluru, India',
     type: 'Full-time',
     description: 'Building and deploying machine learning pipelines and data-driven systems at enterprise scale, supporting global clients on the SAP SuccessFactors platform.',
     achievements: [
