@@ -926,6 +926,8 @@ function Footer() {
   )
 }
 
+import GitHubStats from '../components/sections/GitHubStats'
+
 // ── Root ──────────────────────────────────────────────────────────────────────
 export default function CleanHome() {
   return (
@@ -937,6 +939,7 @@ export default function CleanHome() {
       <Projects />
       <Experience />
       <Contact />
+      <GitHubStats accentColor="#4F46E5" dark={false} />
       <Footer />
     </div>
   )
