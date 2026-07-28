@@ -1,4 +1,5 @@
 // Inspired by dima-plotnikov.com — cinematic full-screen sections, extreme minimalism, stark white-on-black
+import GitHubStats from '../components/sections/GitHubStats'
 import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -385,6 +386,7 @@ export default function DimaHome() {
       <Hero />
       <Work />
       <About />
+      <GitHubStats accentColor="#ffffff" dark={true} />
       <Contact />
       <Footer />
     </div>
