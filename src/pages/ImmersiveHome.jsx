@@ -1,3 +1,4 @@
+import GitHubStats from '../components/sections/GitHubStats'
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -1108,6 +1109,7 @@ export default function ImmersiveHome() {
       <About />
       <Projects />
       <Experience />
+      <GitHubStats accentColor="#00FF88" dark={true} />
       <Contact />
       <Footer />
     </div>
