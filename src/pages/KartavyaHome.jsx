@@ -1,4 +1,5 @@
 // Inspired by kartavya-singh.com — bold split-screen, orange accent, horizontal work scroller
+import GitHubStats from '../components/sections/GitHubStats'
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -485,6 +486,7 @@ export default function KartavyaHome() {
       <Work />
       <About />
       <Experience />
+      <GitHubStats accentColor="#FF6B00" dark={true} />
       <Contact />
       <Footer />
     </div>
