@@ -2,84 +2,9 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
-import { FiArrowRight, FiTag } from 'react-icons/fi'
-import { SiInstagram } from 'react-icons/si'
+import { FiArrowRight } from 'react-icons/fi'
 import { reelLinks, getAllTags } from '../data/reelLinks'
-import SectionHeading from '../components/ui/SectionHeading'
 
-const tagColors = {
-  ML:              { bg: '#8B5CF615', text: '#8B5CF6', border: '#8B5CF630' },
-  Python:          { bg: '#06B6D415', text: '#06B6D4', border: '#06B6D430' },
-  JavaScript:      { bg: '#F59E0B15', text: '#F59E0B', border: '#F59E0B30' },
-  DSA:             { bg: '#10B98115', text: '#10B981', border: '#10B98130' },
-  SQL:             { bg: '#F472B615', text: '#F472B6', border: '#F472B630' },
-  Data:            { bg: '#34D39915', text: '#34D399', border: '#34D39930' },
-  'System Design': { bg: '#A78BFA15', text: '#A78BFA', border: '#A78BFA30' },
-  'Full Stack':      { bg: '#38BDF815', text: '#38BDF8', border: '#38BDF830' },
-  Automation:        { bg: '#FB923C15', text: '#FB923C', border: '#FB923C30' },
-  'Crazy Websites':  { bg: '#F43F5E15', text: '#F43F5E', border: '#F43F5E30' },
-  default:           { bg: '#6B728015', text: '#6B7280', border: '#6B728030' },
-}
-
-function tagStyle(tag) {
-  return tagColors[tag] || tagColors.default
-}
-
-// ─── Card ─────────────────────────────────────────────────────────────────────
-function ReelCard({ item, index }) {
-  const style = tagStyle(item.tag)
-  const barColor = style.text
-
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.32, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(139,92,246,0.12)' }}
-      className="group glass rounded-2xl border border-white/5 hover:border-purple-500/30 overflow-hidden transition-colors duration-300 flex flex-col"
-    >
-      <Link to={`/code-drops/${item.slug}`} className="flex flex-col flex-1">
-      {/* Tag colour bar */}
-      <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${barColor}, ${barColor}80)` }} />
-
-      <div className="p-6 flex flex-col flex-1">
-        {/* Tag pill */}
-        <div className="flex items-center gap-2 mb-3">
-          <span
-            className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full"
-            style={{ background: style.bg, color: style.text, border: `1px solid ${style.border}` }}
-          >
-            <FiTag size={9} />
-            {item.tag}
-          </span>
-        </div>
-
-        {/* Title */}
-        <h2 className="font-display font-bold text-base text-white group-hover:text-purple-300 transition-colors mb-2 leading-snug">
-          {item.title}
-        </h2>
-
-        {/* Description */}
-        <p className="text-zinc-500 text-sm leading-relaxed mb-5 flex-1 line-clamp-2">
-          {item.description}
-        </p>
-
-        {/* Footer — date + CTA */}
-        <div className="flex items-center justify-between pt-4 border-t border-white/5">
-          <span className="text-zinc-600 text-xs">{item.date}</span>
-          <span className="text-purple-400 text-xs font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            Visit <FiArrowRight size={11} />
-          </span>
-        </div>
-      </div>
-      </Link>
-    </motion.div>
-  )
-}
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function ReelLinksPage() {
   const [activeTag, setActiveTag] = useState('All')
   const tags = getAllTags()
@@ -90,95 +15,99 @@ export default function ReelLinksPage() {
   }, [activeTag])
 
   return (
-    <>
+    <div className="space-y-6">
       <Helmet>
-        <title>Code Drops — ML Projects & Tools | Sai Sridhar Tarra</title>
-        <meta name="description" content="Open-source projects, tools, and experiments in ML, AI, automation, and full-stack development by Sai Sridhar Tarra." />
-        <meta property="og:title" content="Code Drops — ML Projects & Tools | Sai Sridhar Tarra" />
-        <meta property="og:description" content="Open-source projects, tools, and experiments in ML, AI, automation, and full-stack development." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://saisridhartarra.in/code-drops" />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:title" content="Code Drops — ML Projects & Tools | Sai Sridhar Tarra" />
-        <link rel="canonical" href="https://saisridhartarra.in/code-drops" />
+        <title>Code Drops & Snippets | Sai Sridhar Tarra</title>
+        <meta name="description" content="Direct code snippets, repos, and tools shared across Instagram reels and open source by Sai Sridhar Tarra." />
       </Helmet>
 
-      <div className="relative min-h-screen pt-28 pb-24">
-        {/* Background decorations */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="blob w-96 h-96 bg-purple-600/10 top-20 left-1/4 animate-blob" />
-          <div className="blob w-72 h-72 bg-cyan-600/5 bottom-40 right-1/4 animate-blob-delayed" />
-          <div className="grid-bg absolute inset-0 opacity-20" />
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="space-y-2 border-b border-zinc-200 dark:border-zinc-800 pb-5"
+      >
+        <div className="flex items-center gap-2 font-mono text-xs text-zinc-500 dark:text-zinc-400">
+          <Link to="/" className="hover:text-zinc-900 dark:hover:text-white transition-colors">Home</Link>
+          <span>/</span>
+          <span className="text-zinc-900 dark:text-white font-semibold">Code Drops</span>
         </div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          Code Drops & Snippets
+        </h1>
+        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed font-normal">
+          Quick links, gists, and GitHub repositories for code shared across reels, tutorials, and open source projects.
+        </p>
+      </motion.div>
 
-        <div className="section-container relative z-10">
-          {/* Header */}
-          <SectionHeading
-            label="Instagram Reels"
-            title="Code Drops"
-            subtitle="Source code for every reel — click a card to open the file on GitHub."
-            centered
-            className="mb-12"
-          />
+      {/* Tag Filters */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, delay: 0.05 }}
+        className="flex flex-wrap gap-1.5"
+      >
+        {tags.map((tag) => (
+          <button
+            key={tag}
+            onClick={() => setActiveTag(tag)}
+            className={`px-3 py-1 rounded-lg text-xs font-mono font-medium transition-all ${
+              activeTag === tag
+                ? 'bg-zinc-900 text-white dark:bg-white dark:text-black font-semibold shadow-sm'
+                : 'text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:text-zinc-900 dark:hover:text-white'
+            }`}
+          >
+            {tag}
+          </button>
+        ))}
+      </motion.div>
 
-          {/* Instagram nudge */}
-          <div className="flex justify-center mb-10">
-            <a
-              href="https://www.instagram.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-zinc-500 hover:text-pink-400 transition-colors duration-200"
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <AnimatePresence mode="popLayout">
+          {filtered.map((item, idx) => (
+            <motion.div
+              key={item.id}
+              layout
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.3, delay: idx * 0.05 }}
             >
-              <SiInstagram size={14} />
-              Follow on Instagram for new reels
-            </a>
-          </div>
-
-          {/* Tag filter pills */}
-          <div className="flex flex-wrap gap-2 justify-center mb-10">
-            {tags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => setActiveTag(tag)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                  activeTag === tag
-                    ? 'bg-purple-600 text-white'
-                    : 'glass border border-white/5 text-zinc-500 hover:text-white hover:border-white/10'
-                }`}
+              <Link
+                to={`/code-drops/${item.slug}`}
+                className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/90 hover:bg-zinc-50 dark:hover:bg-zinc-900/90 transition-all duration-300 shadow-sm flex flex-col justify-between h-full space-y-4 block"
               >
-                {tag}
-              </button>
-            ))}
-          </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800">
+                      {item.tag}
+                    </span>
+                    <span className="font-mono text-[10px] text-zinc-500">
+                      {item.date}
+                    </span>
+                  </div>
 
-          {/* Count */}
-          <p className="text-zinc-600 text-sm text-center mb-8">
-            {filtered.length} snippet{filtered.length !== 1 ? 's' : ''}
-            {activeTag !== 'All' && ` tagged "${activeTag}"`}
-          </p>
+                  <h2 className="text-base font-bold text-zinc-900 dark:text-white group-hover:text-zinc-700 dark:group-hover:text-zinc-200 transition-colors">
+                    {item.title}
+                  </h2>
 
-          {/* Grid */}
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <AnimatePresence mode="popLayout">
-              {filtered.length > 0 ? (
-                filtered.map((item, i) => (
-                  <ReelCard key={item.id} item={item} index={i} />
-                ))
-              ) : (
-                <motion.div
-                  key="empty"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="col-span-full text-center py-20"
-                >
-                  <p className="text-zinc-500 text-lg mb-2">No snippets yet for this tag</p>
-                  <p className="text-zinc-700 text-sm">Check back after the next reel</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </div>
+                  <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal line-clamp-2">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-zinc-200 dark:border-zinc-900 flex items-center justify-between font-mono text-xs">
+                  <span className="text-zinc-900 dark:text-white font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    {item.cta || 'View Snippet'} <FiArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
-    </>
+    </div>
   )
 }

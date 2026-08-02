@@ -1,211 +1,172 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useScrolledPast } from '../../hooks/useScrollProgress'
-import { HiMenuAlt4, HiX } from 'react-icons/hi'
+import { FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi'
 
-const navLinks = [
-  { label: 'About', href: '/#about' },
-  { label: 'Skills', href: '/#skills' },
-  { label: 'Projects', href: '/#projects' },
-  { label: 'Experience', href: '/#experience' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Code Drops', href: '/code-drops' },
-  { label: 'Contact', href: '/#contact' },
-]
-
-function NavLink({ href, label, onClick }) {
+export default function Navbar() {
   const location = useLocation()
   const navigate = useNavigate()
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark'
+  })
 
-  const isActive =
-    (href === '/blog' && location.pathname.startsWith('/blog')) ||
-    (href === '/code-drops' && location.pathname === '/code-drops') ||
-    (href === '/' && location.pathname === '/')
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
-  const handleClick = (e) => {
-    onClick?.()
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'dark') {
+      root.classList.add('dark')
+      root.classList.remove('light')
+    } else {
+      root.classList.remove('dark')
+      root.classList.add('light')
+    }
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  }
+
+  const handleNavClick = (href, e) => {
+    setMobileOpen(false)
+
+    if (href === '/') {
+      if (location.pathname === '/') {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+      return
+    }
 
     if (href.startsWith('/#')) {
       e.preventDefault()
-      const sectionId = href.slice(2) // strip /#
+      const targetId = href.replace('/#', '')
 
       if (location.pathname !== '/') {
-        // ── KEY FIX ──────────────────────────────────────────────────────
-        // We're NOT on the home page (e.g., /blog). Navigate home first
-        // and pass the scroll target via React Router state so Home.jsx
-        // can pick it up and scroll after mounting.
-        navigate('/', { state: { scrollTo: sectionId } })
+        navigate('/', { state: { scrollTo: targetId } })
       } else {
-        // Already on home — just smooth scroll in place
-        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
-        window.history.replaceState(null, '', href)
+        const elem = document.getElementById(targetId)
+        if (elem) {
+          elem.scrollIntoView({ behavior: 'smooth' })
+        }
       }
     }
   }
 
+  const navItems = [
+    { label: 'Home', href: '/' },
+    { label: 'Projects', href: '/#projects' },
+    { label: 'Experience', href: '/#experience' },
+    { label: 'Skills', href: '/#skills' },
+    { label: 'Articles', href: '/blog' },
+    { label: 'Code Drops', href: '/code-drops' },
+    { label: 'Contact', href: '/#contact' },
+  ]
+
   return (
-    <Link
-      to={href}
-      onClick={handleClick}
-      className={`relative text-sm font-medium transition-colors duration-200 group ${
-        isActive ? 'text-white' : 'text-zinc-400 hover:text-white'
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-white/90 dark:bg-black/90 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 py-3 shadow-sm'
+          : 'bg-white/80 dark:bg-black/80 backdrop-blur-sm py-4 border-b border-zinc-100 dark:border-zinc-900'
       }`}
     >
-      {label}
-      {/* Gradient underline slides in on hover */}
-      <span className="absolute -bottom-0.5 left-0 h-px w-0 group-hover:w-full transition-all duration-300 ease-out bg-gradient-to-r from-purple-500 to-cyan-500" />
-      {/* Active dot */}
-      {isActive && (
-        <motion.span
-          layoutId="nav-active-dot"
-          className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-purple-400"
-          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-        />
-      )}
-    </Link>
-  )
-}
-
-export default function Navbar() {
-  const scrolled = useScrolledPast(60)
-  const [mobileOpen, setMobileOpen] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => { if (window.innerWidth > 768) setMobileOpen(false) }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [mobileOpen])
-
-  return (
-    <>
-      <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'py-3 glass border-b border-white/5' : 'py-5 bg-transparent'
-        }`}
-      >
-        <div className="section-container flex items-center justify-between">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="flex items-center group"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          >
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-              className="flex items-center select-none"
-            >
-              <span className="font-display font-bold text-2xl tracking-tight text-white lowercase">
-                tarra
-              </span>
-              <span
-                className="font-display font-black text-3xl leading-none"
-                style={{ background: 'linear-gradient(135deg, #8B5CF6, #06B6D4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
-              >
-                .
-              </span>
-            </motion.div>
-          </Link>
-
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <NavLink key={link.href} {...link} />
-            ))}
-          </nav>
-
-          {/* Resume CTA + hamburger */}
-          <div className="flex items-center gap-4">
-            <motion.a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full border border-purple-500/40 text-purple-300 hover:bg-purple-500/10 hover:border-purple-500 transition-all duration-200"
-            >
-              Resume ↗
-            </motion.a>
-
-            <button
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg glass text-white z-50"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label="Toggle menu"
-            >
-              <AnimatePresence mode="wait">
-                {mobileOpen ? (
-                  <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                    <HiX size={18} />
-                  </motion.div>
-                ) : (
-                  <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                    <HiMenuAlt4 size={18} />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        
+        {/* Brand */}
+        <Link
+          to="/"
+          onClick={(e) => handleNavClick('/', e)}
+          className="flex items-center gap-3 group"
+        >
+          <div className="w-8 h-8 rounded-lg overflow-hidden border border-zinc-300 dark:border-zinc-700 group-hover:border-zinc-900 dark:group-hover:border-white transition-colors">
+            <img
+              src="/profile.jpg"
+              alt="Sai Sridhar Tarra"
+              className="w-full h-full object-cover filter grayscale"
+            />
           </div>
-        </div>
-      </motion.header>
+          <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100 tracking-tight">
+            Sai Sridhar Tarra
+          </span>
+        </Link>
 
-      {/* Mobile overlay */}
+        {/* Desktop Nav Items */}
+        <nav className="hidden md:flex items-center gap-1 font-mono text-xs">
+          {navItems.map((item) => {
+            const isBlog = item.href === '/blog' && location.pathname.startsWith('/blog')
+            const isCode = item.href === '/code-drops' && location.pathname.startsWith('/code-drops')
+            const isHome = item.href === '/' && location.pathname === '/'
+            const isActive = isBlog || isCode || isHome
+
+            return (
+              <Link
+                key={item.label}
+                to={item.href}
+                onClick={(e) => handleNavClick(item.href, e)}
+                className={`px-3 py-1.5 rounded-lg transition-all ${
+                  isActive
+                    ? 'bg-zinc-900 text-white dark:bg-white dark:text-black font-semibold shadow-sm'
+                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/60'
+                }`}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all"
+          >
+            {theme === 'dark' ? <FiSun className="w-4 h-4 text-amber-400" /> : <FiMoon className="w-4 h-4 text-indigo-600" />}
+          </button>
+
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle mobile menu"
+            className="md:hidden p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300"
+          >
+            {mobileOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 md:hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-black/95 px-4 py-4 space-y-2 font-mono text-sm"
           >
-            <div className="absolute inset-0 bg-dark/80 backdrop-blur-xl" onClick={() => setMobileOpen(false)} />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="absolute right-0 top-0 h-full w-72 glass border-l border-white/5 flex flex-col"
-            >
-              <div className="flex-1 flex flex-col justify-center px-8 gap-6">
-                {navLinks.map((link, i) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 + 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <NavLink {...link} onClick={() => setMobileOpen(false)} />
-                  </motion.div>
-                ))}
-                <motion.div
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: navLinks.length * 0.05 + 0.1 }}
-                >
-                  <a
-                    href="/resume.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-primary text-sm mt-2 w-full justify-center"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    View Resume ↗
-                  </a>
-                </motion.div>
-              </div>
-            </motion.div>
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                to={item.href}
+                onClick={(e) => handleNavClick(item.href, e)}
+                className="block px-4 py-2.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              >
+                {item.label}
+              </Link>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </header>
   )
 }

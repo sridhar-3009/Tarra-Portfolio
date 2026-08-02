@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Layout from './components/layout/Layout'
 import LoadingScreen from './components/ui/LoadingScreen'
+import ScrollToTop from './components/utils/ScrollToTop'
 
-// Lazy loaded pages for code splitting
+// Lazy loaded pages
 const Home = lazy(() => import('./pages/Home'))
 const BlogListPage = lazy(() => import('./pages/BlogListPage'))
 const BlogPostPage = lazy(() => import('./pages/BlogPostPage'))
@@ -12,35 +13,31 @@ const ReelLinksPage = lazy(() => import('./pages/ReelLinksPage'))
 const ReelLinkDetailPage = lazy(() => import('./pages/ReelLinkDetailPage'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
-// ─── Page Transition Wrapper ──────────────────────────────────────────────────
 function PageTransition({ children }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       {children}
     </motion.div>
   )
 }
 
-// ─── Suspense fallback ────────────────────────────────────────────────────────
 function PageLoader() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="py-24 flex items-center justify-center">
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-        className="w-6 h-6 rounded-full border-2 border-transparent"
-        style={{ borderTopColor: '#8B5CF6' }}
+        className="w-6 h-6 rounded-full border-2 border-zinc-800 border-t-white"
       />
     </div>
   )
 }
 
-// ─── Routes with AnimatePresence ──────────────────────────────────────────────
 function AppRoutes() {
   const location = useLocation()
 
@@ -100,17 +97,15 @@ function AppRoutes() {
   )
 }
 
-// ─── Root App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [loaded, setLoaded] = useState(false)
 
   return (
     <>
-      {/* Loading screen — shows before app renders */}
       {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
 
-      {/* Main application */}
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <ScrollToTop />
         <Layout>
           <Suspense fallback={<PageLoader />}>
             <AppRoutes />

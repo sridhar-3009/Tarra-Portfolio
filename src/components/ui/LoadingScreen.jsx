@@ -1,35 +1,26 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-/**
- * Premium loading screen with:
- * - Animated logo reveal
- * - Progress bar
- * - Smooth fade-out transition
- */
 export default function LoadingScreen({ onComplete }) {
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    // Simulate loading progress
     const intervals = [
-      { delay: 100, value: 25 },
-      { delay: 400, value: 55 },
-      { delay: 800, value: 78 },
-      { delay: 1300, value: 95 },
-      { delay: 1700, value: 100 },
+      { delay: 80, value: 30 },
+      { delay: 300, value: 65 },
+      { delay: 600, value: 90 },
+      { delay: 900, value: 100 },
     ]
 
     const timers = intervals.map(({ delay, value }) =>
       setTimeout(() => setProgress(value), delay)
     )
 
-    // Begin exit animation after loading
     const exitTimer = setTimeout(() => {
       setVisible(false)
-      setTimeout(() => onComplete?.(), 600)
-    }, 2200)
+      setTimeout(() => onComplete?.(), 400)
+    }, 1200)
 
     return () => {
       timers.forEach(clearTimeout)
@@ -41,87 +32,61 @@ export default function LoadingScreen({ onComplete }) {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="loading-screen"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black text-white select-none"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
         >
-          {/* Background gradient */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="blob w-96 h-96 bg-purple-600/20 -top-20 -left-20 animate-blob" />
-            <div className="blob w-80 h-80 bg-cyan-600/15 bottom-20 right-20 animate-blob-delayed" />
-          </div>
-
-          <div className="relative z-10 flex flex-col items-center gap-8">
-            {/* Logo */}
+          <div className="relative z-10 flex flex-col items-center gap-6">
+            
+            {/* Tanjiro Avatar with Pulsing White Border Ring */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
+              initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-              className="relative"
+              transition={{ duration: 0.5 }}
+              className="relative w-24 h-24 rounded-2xl overflow-hidden border border-zinc-700 bg-zinc-900 shadow-2xl"
             >
-              {/* Outer glow ring */}
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)' }}
-                animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.8, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              <img
+                src="/profile.jpg"
+                alt="Sai Sridhar Tarra"
+                className="w-full h-full object-cover filter grayscale"
               />
-
-              {/* Logo box */}
-              <div className="w-20 h-20 rounded-2xl flex items-center justify-center relative overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, #8B5CF6, #06B6D4)',
-                  boxShadow: '0 0 40px rgba(139, 92, 246, 0.4)',
-                }}
-              >
-                <motion.span
-                  className="text-3xl font-black text-white font-display"
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.3, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  S
-                </motion.span>
-              </div>
+              <div className="absolute inset-0 border border-white/20 rounded-2xl animate-pulse" />
             </motion.div>
 
-            {/* Name */}
+            {/* Name & Subtitle */}
             <motion.div
-              className="text-center"
-              initial={{ opacity: 0, y: 20 }}
+              className="text-center space-y-1"
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
             >
-              <h1 className="text-xl font-bold text-white font-display tracking-tight">
+              <h1 className="text-xl font-bold tracking-tight text-white font-mono">
                 Sai Sridhar Tarra
               </h1>
-              <p className="text-zinc-500 text-sm mt-1 tracking-widest uppercase">
-                ML · AI · Engineer
+              <p className="font-mono text-[11px] text-zinc-400 tracking-widest uppercase">
+                Machine Learning & AI Engineer
               </p>
             </motion.div>
 
-            {/* Progress bar */}
+            {/* Progress Bar */}
             <motion.div
-              className="w-48 flex flex-col gap-2"
+              className="w-48 flex flex-col gap-1.5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.7, duration: 0.3 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
             >
-              <div className="h-px bg-white/5 rounded-full overflow-hidden">
+              <div className="h-1 bg-zinc-800 rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full rounded-full"
-                  style={{
-                    background: 'linear-gradient(90deg, #8B5CF6, #06B6D4)',
-                    width: `${progress}%`,
-                    transition: 'width 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                  }}
+                  className="h-full bg-white rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
                 />
               </div>
-              <span className="text-xs text-zinc-600 text-right tabular-nums">
+              <span className="font-mono text-[10px] text-zinc-500 text-right tabular-nums">
                 {progress}%
               </span>
             </motion.div>
+
           </div>
         </motion.div>
       )}

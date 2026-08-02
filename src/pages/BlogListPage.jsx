@@ -1,213 +1,158 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
-import { FiSearch, FiCalendar, FiClock, FiTag, FiArrowRight } from 'react-icons/fi'
+import { FiSearch, FiCalendar, FiClock, FiArrowRight } from 'react-icons/fi'
 import { blogPosts, getAllCategories } from '../blog'
 import { formatDate } from '../utils/blogUtils'
-import SectionHeading from '../components/ui/SectionHeading'
 
-// ─── Blog Card ────────────────────────────────────────────────────────────────
-function BlogCard({ post, index }) {
-  const tagColors = {
-    'Deep Learning': '#8B5CF6',
-    'MLOps': '#06B6D4',
-    'AI Research': '#10B981',
-    'Computer Vision': '#F59E0B',
-    'Machine Learning': '#A78BFA',
-    'Data Engineering': '#34D399',
-    'default': '#6B7280',
-  }
-  const color = tagColors[post.category] || tagColors.default
-
-  return (
-    // Cards are visible immediately (opacity: 1) — only animate position for polish
-    <motion.article
-      initial={{ opacity: 1, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(139,92,246,0.12)' }}
-      className="group glass rounded-2xl border border-white/5 hover:border-purple-500/30 overflow-hidden transition-colors duration-300"
-    >
-      <Link to={`/blog/${post.slug}`} className="block">
-        {/* Category colour bar */}
-        <div
-          className="h-1 w-full"
-          style={{ background: `linear-gradient(90deg, ${color}, ${color}80)` }}
-        />
-
-        <div className="p-6">
-          {/* Meta row */}
-          <div className="flex items-center gap-3 mb-3 flex-wrap">
-            <span
-              className="text-xs font-semibold px-2.5 py-1 rounded-full"
-              style={{
-                background: `${color}15`,
-                color: color,
-                border: `1px solid ${color}30`,
-              }}
-            >
-              {post.category}
-            </span>
-            {post.featured && (
-              <span className="text-xs font-semibold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full">
-                Featured
-              </span>
-            )}
-          </div>
-
-          {/* Title */}
-          <h2 className="font-display font-bold text-lg text-white group-hover:text-purple-300 transition-colors mb-2 leading-snug">
-            {post.title}
-          </h2>
-
-          {/* Excerpt */}
-          <p className="text-zinc-500 text-sm leading-relaxed mb-5 line-clamp-2">
-            {post.excerpt}
-          </p>
-
-          {/* Footer */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-xs text-zinc-600">
-              <span className="flex items-center gap-1.5">
-                <FiCalendar size={11} />
-                {formatDate(post.date)}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <FiClock size={11} />
-                {post.readTime}
-              </span>
-            </div>
-            <span className="text-purple-400 text-xs font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              Read <FiArrowRight size={11} />
-            </span>
-          </div>
-
-          {/* Tags */}
-          {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-white/5">
-              {post.tags.slice(0, 3).map((tag) => (
-                <span key={tag} className="flex items-center gap-1 text-zinc-600 text-xs">
-                  <FiTag size={9} /> {tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </Link>
-    </motion.article>
-  )
-}
-
-// ─── Main ─────────────────────────────────────────────────────────────────────
 export default function BlogListPage() {
-  const [search, setSearch] = useState('')
-  const [activeCategory, setActiveCategory] = useState('All')
-  const categories = getAllCategories()
+  const [query, setQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('All')
 
-  const filtered = useMemo(() => {
+  const categories = useMemo(() => Array.from(new Set(['All', ...getAllCategories()])), [])
+
+  const filteredPosts = useMemo(() => {
     return blogPosts.filter((post) => {
+      const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory
+      const q = query.toLowerCase()
       const matchesSearch =
-        !search ||
-        post.title.toLowerCase().includes(search.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(search.toLowerCase()) ||
-        post.tags.some((t) => t.toLowerCase().includes(search.toLowerCase()))
-
-      const matchesCategory = activeCategory === 'All' || post.category === activeCategory
-
-      return matchesSearch && matchesCategory
+        !query ||
+        post.title.toLowerCase().includes(q) ||
+        post.excerpt.toLowerCase().includes(q) ||
+        post.tags?.some((t) => t.toLowerCase().includes(q))
+      return matchesCategory && matchesSearch
     })
-  }, [search, activeCategory])
+  }, [query, selectedCategory])
 
   return (
-    <>
+    <div className="space-y-6">
       <Helmet>
-        <title>AI & ML Blog | Sai Sridhar Tarra</title>
-        <meta name="description" content="Deep dives on transformers, LLMs, memory models, neuroscience AI, and modern ML systems — written by an ML engineer." />
-        <meta property="og:title" content="AI & ML Blog | Sai Sridhar Tarra" />
-        <meta property="og:description" content="Deep dives on transformers, LLMs, memory models, neuroscience AI, and modern ML systems." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://saisridhartarra.in/blog" />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:title" content="AI & ML Blog | Sai Sridhar Tarra" />
-        <meta property="twitter:description" content="Deep dives on transformers, LLMs, memory models, and modern ML systems." />
-        <link rel="canonical" href="https://saisridhartarra.in/blog" />
+        <title>Articles & Technical Notes | Sai Sridhar Tarra</title>
+        <meta name="description" content="Technical articles, research notes, and engineering guides on Machine Learning, LLMs, and Software Systems." />
       </Helmet>
 
-      <div className="relative min-h-screen pt-28 pb-24">
-        {/* Background decorations */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="blob w-96 h-96 bg-purple-600/10 top-20 left-1/4 animate-blob" />
-          <div className="blob w-72 h-72 bg-cyan-600/5 bottom-40 right-1/4 animate-blob-delayed" />
-          <div className="grid-bg absolute inset-0 opacity-20" />
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="space-y-2 border-b border-zinc-200 dark:border-zinc-800 pb-5"
+      >
+        <div className="flex items-center gap-2 font-mono text-xs text-zinc-500 dark:text-zinc-400">
+          <Link to="/" className="hover:text-zinc-900 dark:hover:text-white transition-colors">Home</Link>
+          <span>/</span>
+          <span className="text-zinc-900 dark:text-white font-semibold">Articles</span>
         </div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          Articles & Technical Notes
+        </h1>
+        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed font-normal">
+          Deep dives into Machine Learning research, MLOps architecture, LLMs, and real-world software engineering challenges.
+        </p>
+      </motion.div>
 
-        <div className="section-container relative z-10">
-          {/* Header */}
-          <SectionHeading
-            label="Writing"
-            title="Blog"
-            subtitle="Thoughts on ML research, engineering patterns, and the future of AI — written for practitioners."
-            centered
-            className="mb-12"
+      {/* Search & Category Filters */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, delay: 0.05 }}
+        className="space-y-3"
+      >
+        <div className="relative">
+          <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Search articles by title, tag, or topic..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-zinc-900 dark:focus:border-white font-mono"
           />
-
-          {/* Search */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-10 max-w-2xl mx-auto">
-            <div className="relative flex-1">
-              <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={15} />
-              <input
-                type="text"
-                placeholder="Search articles..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full glass border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-purple-500/50 transition-colors cursor-auto"
-              />
-            </div>
-          </div>
-
-          {/* Category pills */}
-          <div className="flex flex-wrap gap-2 justify-center mb-10">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                  activeCategory === cat
-                    ? 'bg-purple-600 text-white'
-                    : 'glass border border-white/5 text-zinc-500 hover:text-white hover:border-white/10'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Results count */}
-          <p className="text-zinc-600 text-sm text-center mb-8">
-            {filtered.length} article{filtered.length !== 1 ? 's' : ''}
-            {search && ` matching "${search}"`}
-          </p>
-
-          {/* Blog grid */}
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filtered.map((post, i) => (
-                <BlogCard key={post.slug} post={post} index={i} />
-              ))}
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20"
-            >
-              <p className="text-zinc-500 text-lg mb-2">No articles found</p>
-              <p className="text-zinc-700 text-sm">Try a different search term or category</p>
-            </motion.div>
-          )}
         </div>
+
+        <div className="flex flex-wrap gap-1.5 pt-1">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1 rounded-lg text-xs font-mono font-medium transition-all ${
+                selectedCategory === cat
+                  ? 'bg-zinc-900 text-white dark:bg-white dark:text-black font-semibold shadow-sm'
+                  : 'text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:text-zinc-900 dark:hover:text-white'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Posts List */}
+      <div className="space-y-4 pt-2">
+        <AnimatePresence mode="popLayout">
+          {filteredPosts.length > 0 ? (
+            filteredPosts.map((post, idx) => (
+              <motion.div
+                key={post.slug}
+                layout
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.3, delay: idx * 0.05 }}
+              >
+                <Link
+                  to={`/blog/${post.slug}`}
+                  className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/90 hover:bg-zinc-50 dark:hover:bg-zinc-900/90 transition-all duration-300 shadow-sm flex flex-col justify-between space-y-3 block"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800">
+                        {post.category}
+                      </span>
+                      <div className="flex items-center gap-3 font-mono text-[11px] text-zinc-500">
+                        <span className="flex items-center gap-1">
+                          <FiCalendar className="w-3 h-3 text-zinc-400" />
+                          {formatDate(post.date)}
+                        </span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1">
+                          <FiClock className="w-3 h-3 text-zinc-400" />
+                          {post.readTime}
+                        </span>
+                      </div>
+                    </div>
+
+                    <h2 className="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-zinc-700 dark:group-hover:text-zinc-200 transition-colors">
+                      {post.title}
+                    </h2>
+                    <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
+                      {post.excerpt}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-zinc-200 dark:border-zinc-900 flex items-center justify-between font-mono text-xs">
+                    <div className="flex flex-wrap gap-1.5">
+                      {post.tags?.slice(0, 3).map((t) => (
+                        <span key={t} className="text-zinc-500">
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+
+                    <span className="font-semibold text-zinc-900 dark:text-white flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      Read article <FiArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))
+          ) : (
+            <div className="text-center py-12 border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-white dark:bg-zinc-950 font-mono text-xs text-zinc-500">
+              No articles found matching &quot;{query}&quot;.
+            </div>
+          )}
+        </AnimatePresence>
       </div>
-    </>
+    </div>
   )
 }

@@ -17,7 +17,7 @@ export const experiences = [
       'Collaborated with cross-functional teams to translate business requirements into ML solutions and actionable analytics dashboards',
     ],
     tech: ['Python', 'Scikit-learn', 'NLP', 'SQL', 'Pandas', 'Power BI', 'SAP SuccessFactors'],
-    color: '#A100FF',
+    color: '#ffffff',
     logo: 'A',
   },
   {
@@ -37,7 +37,7 @@ export const experiences = [
       'Engineered a full-stack Chrome extension with OAuth Gmail integration and a React-based dashboard',
     ],
     tech: ['Python', 'LLMs', 'RAG', 'FastAPI', 'React', 'Chrome Extension', 'Gmail API'],
-    color: '#10B981',
+    color: '#ffffff',
     logo: 'M',
   },
   {
@@ -56,7 +56,7 @@ export const experiences = [
       'Built multiple AI and Full-Stack projects alongside engineering coursework',
     ],
     tech: ['C++', 'Python', 'DSA', 'Machine Learning', 'SQL'],
-    color: '#F59E0B',
+    color: '#ffffff',
     logo: 'M',
   },
   {
@@ -74,7 +74,7 @@ export const experiences = [
       'Built strong fundamentals in mathematics and analytical thinking',
     ],
     tech: ['Mathematics', 'Engineering Fundamentals'],
-    color: '#EF4444',
+    color: '#ffffff',
     logo: 'G',
   },
 ];

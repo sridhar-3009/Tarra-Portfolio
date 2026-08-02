@@ -1,30 +1,30 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useLocation } from 'react-router-dom'
-import Hero from '../components/sections/Hero'
-import About from '../components/sections/About'
-import Skills from '../components/sections/Skills'
+import ExpandableBio from '../components/sections/ExpandableBio'
+import TerminalTypewriter from '../components/ui/TerminalTypewriter'
+import Specializations from '../components/sections/Specializations'
 import Projects from '../components/sections/Projects'
 import Experience from '../components/sections/Experience'
-import Testimonials from '../components/sections/Testimonials'
-import NewsletterBanner from '../components/sections/NewsletterBanner'
+import Skills from '../components/sections/Skills'
+import BlogPreview from '../components/sections/BlogPreview'
 import Contact from '../components/sections/Contact'
 import { personal } from '../data/personal'
+
+const SectionDivider = () => (
+  <hr className="border-t border-zinc-200 dark:border-zinc-800/80 my-8 sm:my-12" />
+)
 
 export default function Home() {
   const location = useLocation()
 
-  // ── Handle cross-page anchor navigation ──────────────────────────────────
-  // When the Navbar navigates from /blog → / with { state: { scrollTo: 'about' } },
-  // we read that state here after the home page mounts and smoothly scroll to the target.
   useEffect(() => {
     const target = location.state?.scrollTo
     if (!target) return
 
-    // Small delay: give AnimatePresence page-transition + section render time to settle
     const timer = setTimeout(() => {
       document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' })
-    }, 550)
+    }, 300)
 
     return () => clearTimeout(timer)
   }, [location.state])
@@ -39,13 +39,40 @@ export default function Home() {
         <link rel="canonical" href="https://saisridhartarra.in/" />
       </Helmet>
 
-      <Hero />
-      <About />
-      <Skills />
+      {/* Bio Section */}
+      <ExpandableBio />
+
+      {/* Robotic Futuristic Terminal Typewriter Component */}
+      <TerminalTypewriter />
+
+      <SectionDivider />
+
+      {/* Specializations Grid ("What I Do") */}
+      <Specializations />
+
+      <SectionDivider />
+
+      {/* Featured Projects Grid */}
       <Projects />
+
+      <SectionDivider />
+
+      {/* Experience & Education Timeline */}
       <Experience />
-      <Testimonials />
-      <NewsletterBanner />
+
+      <SectionDivider />
+
+      {/* Technical Skills Grid */}
+      <Skills />
+
+      <SectionDivider />
+
+      {/* Blog & Code Drops Preview Feed */}
+      <BlogPreview />
+
+      <SectionDivider />
+
+      {/* Contact Card */}
       <Contact />
     </>
   )
