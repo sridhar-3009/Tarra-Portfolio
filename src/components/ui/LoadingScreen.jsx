@@ -47,7 +47,7 @@ export default function LoadingScreen({ onComplete }) {
               className="relative w-24 h-24 rounded-2xl overflow-hidden border border-zinc-700 bg-zinc-900 shadow-2xl"
             >
               <img
-                src="/profile.jpg"
+                src="/tanjiro.jpg?v=2"
                 alt="Sai Sridhar Tarra"
                 className="w-full h-full object-cover filter grayscale"
               />

@@ -54,7 +54,7 @@ export default function Sidebar() {
             className="w-44 h-44 sm:w-48 sm:h-48 rounded-2xl overflow-hidden border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-black shadow-md relative group cursor-pointer"
           >
             <img
-              src="/profile.jpg"
+              src="/tanjiro.jpg?v=2"
               alt={personal.name}
               className="w-full h-full object-cover object-center filter grayscale hover:grayscale-0 transition-all duration-500"
             />

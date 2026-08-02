@@ -90,7 +90,7 @@ export default function Navbar() {
         >
           <div className="w-8 h-8 rounded-lg overflow-hidden border border-zinc-300 dark:border-zinc-700 group-hover:border-zinc-900 dark:group-hover:border-white transition-colors">
             <img
-              src="/profile.jpg"
+              src="/tanjiro.jpg?v=2"
               alt="Sai Sridhar Tarra"
               className="w-full h-full object-cover filter grayscale"
             />
