@@ -68,6 +68,7 @@ export default function Navbar() {
     { label: 'Experience', href: '/#experience' },
     { label: 'Skills', href: '/#skills' },
     { label: 'Articles', href: '/blog' },
+    { label: 'Videos', href: '/videos' },
     { label: 'Code Drops', href: '/code-drops' },
     { label: 'Contact', href: '/#contact' },
   ]
@@ -105,8 +106,9 @@ export default function Navbar() {
           {navItems.map((item) => {
             const isBlog = item.href === '/blog' && location.pathname.startsWith('/blog')
             const isCode = item.href === '/code-drops' && location.pathname.startsWith('/code-drops')
+            const isVideos = item.href === '/videos' && location.pathname.startsWith('/videos')
             const isHome = item.href === '/' && location.pathname === '/'
-            const isActive = isBlog || isCode || isHome
+            const isActive = isBlog || isCode || isVideos || isHome
 
             return (
               <Link
