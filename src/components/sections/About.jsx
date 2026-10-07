@@ -169,10 +169,10 @@ function AnimatedBio() {
     <div ref={ref} className="space-y-3">
       <p className="bio-line text-zinc-300 text-base md:text-lg leading-relaxed">{personal.bio}</p>
       <p className="bio-line text-zinc-400 text-sm leading-relaxed">
-        Currently a{' '}
+        Formerly a{' '}
         <span className="text-white font-medium">Machine Learning Engineer at Accenture</span>{' '}
         and founder of{' '}
-        <span className="text-white font-medium">MailAir</span> — an LLM-powered email assistant built on RAG and FastAPI.
+        <span className="text-white font-medium">MailAir</span> — an AI email platform built on Claude AI, FastAPI, and Next.js.
       </p>
       <p className="bio-line text-zinc-400 text-sm leading-relaxed">
         When I'm not shipping models, I make coding reels on Instagram, solve DSA problems, and dig into the latest from NeurIPS and ICML.

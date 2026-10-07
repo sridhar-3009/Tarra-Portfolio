@@ -5,6 +5,7 @@ import {
   FiLinkedin, 
   FiTwitter, 
   FiMail, 
+  FiPhone,
   FiFileText,
   FiMapPin
 } from 'react-icons/fi'
@@ -129,6 +130,7 @@ export default function Sidebar() {
               { icon: FiLinkedin, href: personal.linkedin, label: 'LinkedIn' },
               { icon: FiTwitter, href: personal.twitter, label: 'Twitter' },
               { icon: FiMail, href: `mailto:${personal.email}`, label: 'Email' },
+              { icon: FiPhone, href: `tel:${personal.phone.replace(/\s/g, '')}`, label: 'Phone' },
             ].map((soc, idx) => {
               const Icon = soc.icon
               return (

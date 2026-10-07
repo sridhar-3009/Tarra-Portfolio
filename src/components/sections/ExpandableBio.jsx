@@ -25,7 +25,7 @@ export default function ExpandableBio() {
               <span className="text-zinc-900 dark:text-white font-bold underline decoration-zinc-400 dark:decoration-zinc-600 decoration-2 underline-offset-4">
                 MailAir
               </span>
-              , an AI email assistant utilizing LLMs and Retrieval-Augmented Generation (RAG) to auto-draft responses, summarize thread histories, and categorize high-priority messages.
+              , an AI email management platform using Claude AI to categorize emails, score priority, and draft replies. Now pursuing an MSc in Statistics with Data Science at the University of Edinburgh — open to work.
             </p>
             <p>
               Deeply interested in large language models, MLOps, NLP workflows, and high-performance algorithms. Solved over 1000+ competitive programming problems and built end-to-end forecasting engines handling 50K+ products.
