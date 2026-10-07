@@ -5,7 +5,7 @@ export const personal = {
   email: 'saisridhar.tarra@gmail.com',
   phone: '+44 7344 817018',
   location: 'Edinburgh, UK',
-  github: 'https://github.com/sai-sridhar-repo-07',
+  github: 'https://github.com/sridhar-3009',
   linkedin: 'https://www.linkedin.com/in/sai-sridhar-tarra-2a77561a2/',
   twitter: 'https://x.com/sridhar_3009',
   resume: '/resume.pdf',

@@ -14,7 +14,7 @@ When the Claude Code source leaked, the AI developer community got an unexpected
 
 I read every line. Then I built my own version.
 
-**[Forge](https://github.com/sai-sridhar-repo-07/tarra-claw)** is an open-source AI coding agent CLI written in Go. It does what Claude Code does — code review, commit generation, interactive AI chat, file editing, bash execution — but it's a single 16MB binary that starts in under 50ms, runs fully offline via Ollama, and costs nothing if you don't want to pay for an API.
+**[Forge](https://github.com/sridhar-3009/tarra-claw)** is an open-source AI coding agent CLI written in Go. It does what Claude Code does — code review, commit generation, interactive AI chat, file editing, bash execution — but it's a single 16MB binary that starts in under 50ms, runs fully offline via Ollama, and costs nothing if you don't want to pay for an API.
 
 This post is about what I learned building it and why Go was the right choice.
 
@@ -142,7 +142,7 @@ I spent more time on the system prompt than on any other single component. The m
 
 ```bash
 # Download binary (macOS Apple Silicon)
-curl -L https://github.com/sai-sridhar-repo-07/tarra-claw/releases/latest/download/forge-darwin-arm64 -o forge
+curl -L https://github.com/sridhar-3009/tarra-claw/releases/latest/download/forge-darwin-arm64 -o forge
 chmod +x forge && sudo mv forge /usr/local/bin/
 
 # Set your key
@@ -224,7 +224,7 @@ If you're a developer who's been treating these tools as black boxes, I'd encour
 
 Forge is MIT licensed. Read it, fork it, break it, make it better.
 
-**[github.com/sai-sridhar-repo-07/tarra-claw](https://github.com/sai-sridhar-repo-07/tarra-claw)**
+**[github.com/sridhar-3009/tarra-claw](https://github.com/sridhar-3009/tarra-claw)**
 
 ---
 

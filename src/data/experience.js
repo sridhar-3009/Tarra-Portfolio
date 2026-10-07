@@ -22,7 +22,7 @@ export const experiences = [
     id: 2,
     role: 'Founder',
     company: 'MailAir – AI Email Platform',
-    companyUrl: 'https://github.com/sai-sridhar-repo-07',
+    companyUrl: 'https://github.com/sridhar-3009',
     period: 'May 2026 – Present',
     duration: 'Ongoing',
     location: 'Bengaluru, India',
