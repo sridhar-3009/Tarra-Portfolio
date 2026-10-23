@@ -15,7 +15,7 @@ export default function Footer() {
         <div className="flex items-center gap-3">
           <span>© {new Date().getFullYear()} {personal.name}</span>
           <span>•</span>
-          <span>Hyderabad, India</span>
+          <span>{personal.location}</span>
         </div>
 
         <div className="flex items-center gap-4">
