@@ -65,7 +65,7 @@ export default function LoadingScreen({ onComplete }) {
                 Sai Sridhar Tarra
               </h1>
               <p className="font-mono text-[11px] text-zinc-400 tracking-widest uppercase">
-                Machine Learning & AI Engineer
+                Software Engineer & ML
               </p>
             </motion.div>
 
