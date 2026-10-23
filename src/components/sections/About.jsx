@@ -116,7 +116,7 @@ function ProfileBlock() {
             <span className="text-sm">🏆</span>
             <div>
               <p className="text-white text-xs font-bold">Accenture</p>
-              <p className="text-zinc-500 text-xs">@ ML Eng.</p>
+              <p className="text-zinc-500 text-xs">@ Software Eng.</p>
             </div>
           </div>
         </motion.div>
@@ -170,7 +170,7 @@ function AnimatedBio() {
       <p className="bio-line text-zinc-300 text-base md:text-lg leading-relaxed">{personal.bio}</p>
       <p className="bio-line text-zinc-400 text-sm leading-relaxed">
         Formerly a{' '}
-        <span className="text-white font-medium">Machine Learning Engineer at Accenture</span>{' '}
+        <span className="text-white font-medium">Software Engineer at Accenture</span>{' '}
         and founder of{' '}
         <span className="text-white font-medium">MailAir</span> — an AI email platform built on Claude AI, FastAPI, and Next.js.
       </p>

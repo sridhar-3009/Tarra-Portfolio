@@ -79,7 +79,7 @@ export default function Sidebar() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full font-mono text-[11px] border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-300 shadow-sm"
           >
             <span className="w-2 h-2 rounded-full bg-zinc-900 dark:bg-white animate-ping" />
-            <span>Available for ML & AI Roles</span>
+            <span>Open to SWE & ML Roles</span>
           </motion.div>
         </div>
 

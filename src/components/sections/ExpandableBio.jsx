@@ -16,9 +16,9 @@ export default function ExpandableBio() {
             <p>
               I&apos;m a software engineer specializing in{' '}
               <span className="text-zinc-900 dark:text-white font-bold underline decoration-zinc-400 dark:decoration-zinc-600 decoration-2 underline-offset-4">
-                Machine Learning & AI systems
+                backend systems & machine learning
               </span>
-              , building production ML pipelines, LLM-powered applications, and scalable data infrastructure. Formerly ML Engineer at Accenture.
+              , building performant C++ and Python services, LLM agent platforms, and deep learning models. Formerly Software Engineer at Accenture, optimising backend services for a banking client.
             </p>
             <p>
               Founder of{' '}
@@ -28,7 +28,7 @@ export default function ExpandableBio() {
               , an AI email management platform using Claude AI to categorize emails, score priority, and draft replies. Now pursuing an MSc in Statistics with Data Science at the University of Edinburgh — open to work.
             </p>
             <p>
-              Deeply interested in large language models, MLOps, NLP workflows, and high-performance algorithms. Solved over 1000+ competitive programming problems and built end-to-end forecasting engines handling 50K+ products.
+              Deeply interested in machine learning, deep learning, large language models, and high-performance algorithms. Solved 1000+ competitive programming problems and am a Codeforces Specialist.
             </p>
           </div>
         </motion.div>

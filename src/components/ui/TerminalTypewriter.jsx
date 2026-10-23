@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'
 import { FiTerminal } from 'react-icons/fi'
 
 const phrases = [
-  'Initializing neural network architectures...',
-  'Building LLM & RAG productivity systems...',
-  'Optimizing MLOps & demand forecasting models...',
-  'Architecting production AI applications...',
+  'Profiling C++ backend services...',
+  'Shipping FastAPI services with lower p95 latency...',
+  'Training deep learning models in PyTorch...',
+  'Building LLM agents with sandboxed tool calling...',
   'Translating research into scalable software...',
 ]
 

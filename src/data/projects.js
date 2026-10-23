@@ -1,5 +1,51 @@
 export const projects = [
   {
+    id: 'huddle',
+    title: 'Huddle',
+    subtitle: 'Multiplayer AI Coding Agent Platform',
+    description: 'A multiplayer workspace where a team watches and steers one AI coding agent live — with driver hand-off, queued suggestions, and comments.',
+    longDescription: `Designed an event-sourced backend: 40+ versioned event types stored append-only in PostgreSQL, reduced into UI state and streamed over a WebSocket server written from scratch to RFC 6455.
+
+Implemented the LLM agent loop in Python with tool calling, sandboxing each session in Docker (no network, dropped capabilities, resource limits) with human approval for risky actions. 77 automated tests, self-hosted with HTTPS and nightly backups.`,
+    tech: ['TypeScript', 'Python', 'PostgreSQL', 'Docker', 'WebSockets', 'LLM Agents'],
+    category: 'Backend Systems',
+    gradient: 'from-zinc-900 to-black',
+    accentColor: '#ffffff',
+    liveUrl: null,
+    githubUrl: 'https://github.com/sridhar-3009',
+    featured: true,
+    status: 'Completed',
+    stars: 0,
+    images: [],
+    metrics: [
+      { label: 'Event Types', value: '40+' },
+      { label: 'Automated Tests', value: '77' },
+    ],
+  },
+  {
+    id: 'multilingua',
+    title: 'MultiLingua',
+    subtitle: 'Cross-Lingual Sentiment Analysis API',
+    description: 'Fine-tuned XLM-RoBERTa for sentiment analysis across English, Hindi, and Spanish — including code-mixed text — served as a Dockerised FastAPI service.',
+    longDescription: `Fine-tuned XLM-RoBERTa in PyTorch for cross-lingual sentiment analysis across English, Hindi, and Spanish, reaching 88% accuracy.
+
+Added support for code-mixed text (e.g. Hindi–English) so a single model handles mixed-language input without per-language pipelines. Containerised the FastAPI REST service with Docker and logged predictions to MongoDB, sustaining 500+ requests/min.`,
+    tech: ['PyTorch', 'XLM-RoBERTa', 'FastAPI', 'Docker', 'MongoDB'],
+    category: 'Machine Learning',
+    gradient: 'from-zinc-900 to-black',
+    accentColor: '#ffffff',
+    liveUrl: null,
+    githubUrl: 'https://github.com/sridhar-3009',
+    featured: true,
+    status: 'Completed',
+    stars: 0,
+    images: [],
+    metrics: [
+      { label: 'Accuracy', value: '88%' },
+      { label: 'Throughput', value: '500+ req/min' },
+    ],
+  },
+  {
     id: 'demandcast',
     title: 'DemandCast',
     subtitle: 'Large-Scale Demand Forecasting System',
@@ -13,7 +59,7 @@ Designed a real-time inference API using FastAPI with Redis caching. Added model
     accentColor: '#ffffff',
     liveUrl: null,
     githubUrl: 'https://github.com/sridhar-3009',
-    featured: true,
+    featured: false,
     status: 'Ongoing',
     stars: 0,
     images: ['/projects/demandcast-1.png'],
@@ -36,7 +82,7 @@ Integrated WebRTC for live video and whiteboard sessions. Designed transactional
     accentColor: '#ffffff',
     liveUrl: null,
     githubUrl: 'https://github.com/sridhar-3009',
-    featured: true,
+    featured: false,
     status: 'Completed',
     stars: 0,
     images: ['/projects/skillswap-1.png'],
@@ -137,6 +183,7 @@ Focused on conversational flow design and practical GenAI experimentation.`,
 
 export const categories = [
   'All',
+  'Backend Systems',
   'Machine Learning',
   'Full Stack',
   'Data Engineering',

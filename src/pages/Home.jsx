@@ -32,9 +32,9 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>{personal.name} | ML & AI Engineer</title>
+        <title>{personal.name} | Software Engineer &amp; ML</title>
         <meta name="description" content={`${personal.name} — ${personal.title}. ${personal.bio}`} />
-        <meta property="og:title" content={`${personal.name} | ML & AI Engineer`} />
+        <meta property="og:title" content={`${personal.name} | Software Engineer & ML`} />
         <meta property="og:description" content={personal.bio} />
         <link rel="canonical" href="https://saisridhartarra.in/" />
       </Helmet>

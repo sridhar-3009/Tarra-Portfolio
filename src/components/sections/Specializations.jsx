@@ -1,35 +1,35 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { TbBrain, TbCpu, TbLayoutGrid, TbChartBar } from 'react-icons/tb'
+import { TbBrain, TbCpu, TbServer, TbDatabase } from 'react-icons/tb'
 
 export const services = [
   {
-    id: 'llm',
-    title: 'LLMs & Agentic AI',
-    description: 'Architecting retrieval-augmented generation (RAG) pipelines, intelligent agents, and context-aware natural language workflows.',
-    icon: TbBrain,
-    tag: 'GenAI & RAG',
+    id: 'backend',
+    title: 'Backend Engineering',
+    description: 'Profiling and optimising performance-critical C++ services, and building Python / FastAPI REST APIs and WebSocket servers that hold up under concurrent load.',
+    icon: TbServer,
+    tag: 'C++ & Python',
   },
   {
     id: 'ml',
-    title: 'ML Pipelines & MLOps',
-    description: 'Designing deep learning models (LSTMs, XGBoost), automated anomaly detection, model monitoring, and continuous retraining.',
+    title: 'Machine Learning & Deep Learning',
+    description: 'Fine-tuning transformer models in PyTorch for NLP tasks like cross-lingual sentiment analysis, and serving them as Dockerised APIs.',
     icon: TbCpu,
-    tag: 'Predictive Modeling',
+    tag: 'PyTorch & NLP',
   },
   {
-    id: 'fullstack',
-    title: 'Full-Stack Systems',
-    description: 'Building high-performance React web interfaces, FastAPI microservices, real-time WebRTC channels, and browser extensions.',
-    icon: TbLayoutGrid,
-    tag: 'Web & APIs',
+    id: 'llm',
+    title: 'LLM Agents & AI Products',
+    description: 'Building LLM agent loops with tool calling, sandboxed execution, and human-in-the-loop approval — and AI products like MailAir.',
+    icon: TbBrain,
+    tag: 'Agents & LLMs',
   },
   {
     id: 'data',
-    title: 'Data & Analytics',
-    description: 'Extracting actionable insights from millions of data points, Power BI business dashboards, and optimized SQL engines.',
-    icon: TbChartBar,
-    tag: 'BI & Analytics',
+    title: 'Databases & Reliability',
+    description: 'Designing PostgreSQL schemas and event-sourced stores, optimising queries and indexes, and shipping with unit / integration tests and CI/CD.',
+    icon: TbDatabase,
+    tag: 'SQL & Testing',
   },
 ]
 
