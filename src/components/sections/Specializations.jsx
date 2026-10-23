@@ -20,7 +20,7 @@ export const services = [
   {
     id: 'llm',
     title: 'LLM Agents & AI Products',
-    description: 'Building LLM agent loops with tool calling, sandboxed execution, and human-in-the-loop approval — and AI products like MailAir.',
+    description: 'Building LLM agent loops with tool calling, sandboxed execution, and human-in-the-loop approval — and AI products like MailAir\'s Claude-powered inbox.',
     icon: TbBrain,
     tag: 'Agents & LLMs',
   },

@@ -25,7 +25,7 @@ export default function ExpandableBio() {
               <span className="text-zinc-900 dark:text-white font-bold underline decoration-zinc-400 dark:decoration-zinc-600 decoration-2 underline-offset-4">
                 MailAir
               </span>
-              , an AI email management platform using Claude AI to categorize emails, score priority, and draft replies. Now pursuing an MSc in Statistics with Data Science at the University of Edinburgh — open to work.
+              , which gives small teams one place to run their customer communication — campaigns, a shared Gmail and Outlook inbox, docs, chat, and calls — with an AI layer built on Claude that prioritizes email, extracts action items, spots revenue signals, and drafts replies in each user&apos;s own voice. Now pursuing an MSc in Statistics with Data Science at the University of Edinburgh — open to work.
             </p>
             <p>
               Deeply interested in machine learning, deep learning, large language models, and high-performance algorithms. Solved 1000+ competitive programming problems and am a Codeforces Specialist.

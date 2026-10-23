@@ -172,7 +172,7 @@ function AnimatedBio() {
         Formerly a{' '}
         <span className="text-white font-medium">Software Engineer at Accenture</span>{' '}
         and founder of{' '}
-        <span className="text-white font-medium">MailAir</span> — an AI email platform built on Claude AI, FastAPI, and Next.js.
+        <span className="text-white font-medium">MailAir</span> — a customer communication workspace for small teams, with an AI layer built on Claude.
       </p>
       <p className="bio-line text-zinc-400 text-sm leading-relaxed">
         When I'm not shipping models, I make coding reels on Instagram, solve DSA problems, and dig into the latest from NeurIPS and ICML.
