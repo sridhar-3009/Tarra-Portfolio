@@ -10,7 +10,7 @@ export const personal = {
   twitter: 'https://x.com/sridhar_3009',
   resume: '/resume.pdf',
   // Calendly / Cal.com / Topmate link for the Book a Call section; falls back to email when null
-  bookingUrl: 'https://topmate.io/tarra',
+  bookingUrl: 'https://topmate.io/tarra/2381114?utm_source=portfolio',
   bio: `Software Engineer with backend experience in C++ and Python, founder of MailAir, and MSc Statistics with Data Science student at the University of Edinburgh. Open to work — building performant backend services, LLM agent systems, and ML-powered products.`,
   longBio: `Previously Software Engineer at Accenture, where I optimised performance-critical C++ backend services for a banking client and built Python / FastAPI / PostgreSQL REST APIs for internal banking services — cutting processing time by 25% and p95 latency by 20%.
 
