@@ -12,6 +12,7 @@ const BlogPostPage = lazy(() => import('./pages/BlogPostPage'))
 const ReelLinksPage = lazy(() => import('./pages/ReelLinksPage'))
 const ReelLinkDetailPage = lazy(() => import('./pages/ReelLinkDetailPage'))
 const VideosPage = lazy(() => import('./pages/VideosPage'))
+const AgentSkillsPage = lazy(() => import('./pages/AgentSkillsPage'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 function PageTransition({ children }) {
@@ -90,6 +91,14 @@ function AppRoutes() {
           element={
             <PageTransition>
               <VideosPage />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/agent-skills"
+          element={
+            <PageTransition>
+              <AgentSkillsPage />
             </PageTransition>
           }
         />

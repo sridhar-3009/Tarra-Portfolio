@@ -70,6 +70,8 @@ export default function Navbar() {
     { label: 'Articles', href: '/blog' },
     { label: 'Videos', href: '/videos' },
     { label: 'Code Drops', href: '/code-drops' },
+    { label: 'Agent Skills', href: '/agent-skills' },
+    { label: 'Book a Call', href: '/#book-a-call' },
     { label: 'Contact', href: '/#contact' },
   ]
 
@@ -107,8 +109,9 @@ export default function Navbar() {
             const isBlog = item.href === '/blog' && location.pathname.startsWith('/blog')
             const isCode = item.href === '/code-drops' && location.pathname.startsWith('/code-drops')
             const isVideos = item.href === '/videos' && location.pathname.startsWith('/videos')
+            const isSkills = item.href === '/agent-skills' && location.pathname.startsWith('/agent-skills')
             const isHome = item.href === '/' && location.pathname === '/'
-            const isActive = isBlog || isCode || isVideos || isHome
+            const isActive = isBlog || isCode || isVideos || isSkills || isHome
 
             return (
               <Link

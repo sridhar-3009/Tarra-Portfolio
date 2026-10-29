@@ -8,6 +8,7 @@ import Projects from '../components/sections/Projects'
 import Experience from '../components/sections/Experience'
 import Skills from '../components/sections/Skills'
 import BlogPreview from '../components/sections/BlogPreview'
+import BookCall from '../components/sections/BookCall'
 import Contact from '../components/sections/Contact'
 import { personal } from '../data/personal'
 
@@ -69,6 +70,11 @@ export default function Home() {
 
       {/* Blog & Code Drops Preview Feed */}
       <BlogPreview />
+
+      <SectionDivider />
+
+      {/* Book a Call — Edinburgh & UK jobs */}
+      <BookCall />
 
       <SectionDivider />
 

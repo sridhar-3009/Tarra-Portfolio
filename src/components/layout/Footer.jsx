@@ -22,6 +22,7 @@ export default function Footer() {
           <Link to="/" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Home</Link>
           <Link to="/blog" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Articles</Link>
           <Link to="/code-drops" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Code Drops</Link>
+          <Link to="/agent-skills" className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Agent Skills</Link>
           <button
             onClick={scrollToTop}
             aria-label="Back to top"
