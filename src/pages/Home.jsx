@@ -207,7 +207,11 @@ export default function Home() {
         <section id="contact" aria-labelledby="hi-title" className="scroll-mt-24 text-center">
           <Reveal>
             <SectionTitle id="hi-title" className="mb-3">
-              <Bouncy text="Say hi" inView /> <span className="wave-hand" role="img" aria-label="waving hand">👋</span>
+              <span className="relative inline-block">
+                <Bouncy text="Say hi" inView />
+                <Sparkle className="-right-6 -top-1 text-accent" size={16} />
+                <Sparkle className="-left-5 top-3 text-highlight" size={12} delay={1.2} />
+              </span>
             </SectionTitle>
             <p className="mx-auto mb-8 max-w-xl text-lg text-ink">
               Email is the best way to reach me. I&apos;m open to software engineering and ML roles in the UK.

@@ -645,13 +645,6 @@ html[data-theme] body {
 }
 .letter:hover { animation: letter-bob 0.55s ease-out; }
 
-@keyframes wave-hand {
-  0%, 60%, 100% { transform: rotate(0); }
-  10%, 30% { transform: rotate(16deg); }
-  20%, 40% { transform: rotate(-10deg); }
-}
-.wave-hand { display: inline-block; transform-origin: 70% 75%; animation: wave-hand 2.6s ease-in-out infinite; }
-
 @keyframes twinkle {
   0%, 100% { transform: scale(0.6) rotate(0deg); opacity: 0.45; }
   50% { transform: scale(1) rotate(25deg); opacity: 1; }
@@ -659,5 +652,5 @@ html[data-theme] body {
 .twinkle { animation: twinkle 2.8s ease-in-out infinite; transform-origin: center; }
 
 @media (prefers-reduced-motion: reduce) {
-  .letter:hover, .wave-hand, .twinkle { animation: none; }
+  .letter:hover, .twinkle { animation: none; }
 }

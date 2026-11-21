@@ -57,7 +57,9 @@ export default function BookCall() {
         <ul className="mb-8 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
           {topics.map((topic) => (
             <li key={topic} className="flex gap-2 text-base text-ink">
-              <span aria-hidden="true" className="text-accent">✦</span>
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="mt-1 h-3.5 w-3.5 shrink-0 text-accent">
+                <path d="M12 1.5c.9 5.4 3.3 8.1 10.5 10.5-7.2 2.4-9.6 5.1-10.5 10.5C11.1 17.1 8.7 14.4 1.5 12 8.7 9.6 11.1 6.9 12 1.5Z" fill="currentColor" />
+              </svg>
               <span>{topic}</span>
             </li>
           ))}
