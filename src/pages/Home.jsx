@@ -173,7 +173,7 @@ export default function Home() {
               {photos.length > 0 ? (
                 <>
                   <span className="hidden sm:inline">Drag them around, or click one for a closer look.</span>
-                  <span className="sm:hidden">Tap one for a closer look, then swipe.</span>
+                  <span className="sm:hidden">Swipe through them, or tap one for a closer look.</span>
                 </>
               ) : (
                 'Photos from Edinburgh and beyond, coming soon.'

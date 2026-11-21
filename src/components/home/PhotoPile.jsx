@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 
 // Deterministic pseudo-random so the pile looks the same on every visit.
@@ -83,6 +84,18 @@ export default function PhotoPile({ photos }) {
     if (d && !d.moved) setOpen(d.i)
   }
 
+  // Phones get a tidy deck of cards instead of a scattered pile.
+  if (isMobile && width > 0) {
+    return (
+      <div ref={pileRef} className="w-full">
+        <PhotoDeck photos={photos} onOpen={setOpen} />
+        {open !== null && (
+          <Lightbox photos={photos} index={open} onChange={setOpen} onClose={() => setOpen(null)} />
+        )}
+      </div>
+    )
+  }
+
   return (
     <>
       <div ref={pileRef} className="relative mx-auto w-full max-w-5xl" style={{ height: pileH }}>
@@ -131,6 +144,74 @@ export default function PhotoPile({ photos }) {
         <Lightbox photos={photos} index={open} onChange={setOpen} onClose={() => setOpen(null)} />
       )}
     </>
+  )
+}
+
+// A stack of prints: the top one can be swiped away to reveal the next,
+// and tapped to open. The next two peek out from behind it.
+function PhotoDeck({ photos, onOpen }) {
+  const reduce = useReducedMotion()
+  const [top, setTop] = useState(0)
+  const n = photos.length
+  const next = () => setTop((t) => (t + 1) % n)
+  const prev = () => setTop((t) => (t - 1 + n) % n)
+  const behind = [2, 1].filter((k) => k < n)
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative aspect-[4/5] w-[78%] max-w-[300px]">
+        {behind.map((k) => {
+          const photo = photos[(top + k) % n]
+          return (
+            <div
+              key={`b${k}-${photo.name}`}
+              aria-hidden="true"
+              className="absolute inset-0 overflow-hidden rounded-xl border-2 border-ink bg-zinc-100 shadow-[0_8px_20px_-12px_#00000066] transition-transform duration-300 dark:bg-zinc-900"
+              style={{ transform: `rotate(${k === 1 ? 4 : -5}deg) translate(${k === 1 ? 10 : -10}px, ${k * 6}px) scale(${1 - k * 0.04})` }}
+            >
+              <img src={photo.src} alt="" className="h-full w-full object-cover opacity-90" draggable={false} />
+            </div>
+          )
+        })}
+
+        <AnimatePresence initial={false} mode="popLayout">
+          <motion.button
+            key={photos[top].name}
+            type="button"
+            aria-label={`Open photo ${top + 1} of ${n}`}
+            onClick={() => onOpen(top)}
+            className="absolute inset-0 z-10 overflow-hidden rounded-xl border-2 border-ink bg-zinc-100 shadow-[0_14px_30px_-14px_#00000080] dark:bg-zinc-900"
+            initial={reduce ? false : { scale: 0.92, rotate: 3, opacity: 0 }}
+            animate={{ scale: 1, rotate: -1.5, opacity: 1, x: 0 }}
+            exit={reduce ? { opacity: 0 } : { x: -320, rotate: -18, opacity: 0, transition: { duration: 0.3 } }}
+            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+            drag={reduce ? false : 'x'}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.7}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -60 || info.velocity.x < -400) next()
+              else if (info.offset.x > 60 || info.velocity.x > 400) prev()
+            }}
+          >
+            <img src={photos[top].src} alt={photos[top].caption} className="pointer-events-none h-full w-full object-cover" draggable={false} />
+          </motion.button>
+        </AnimatePresence>
+      </div>
+
+      <div className="mt-6 flex items-center gap-4">
+        <button type="button" aria-label="Previous photo" onClick={prev} className="rounded-full border border-ink p-1.5 text-ink transition-colors hover:bg-highlight hover:border-highlight hover:text-on-highlight">
+          <FiChevronLeft className="h-4 w-4" />
+        </button>
+        <div className="flex gap-1.5" aria-hidden="true">
+          {photos.map((p, i) => (
+            <span key={p.name} className={`h-1.5 rounded-full transition-all duration-300 ${i === top ? 'w-5 bg-accent' : 'w-1.5 bg-ink/25'}`} />
+          ))}
+        </div>
+        <button type="button" aria-label="Next photo" onClick={next} className="rounded-full border border-ink p-1.5 text-ink transition-colors hover:bg-highlight hover:border-highlight hover:text-on-highlight">
+          <FiChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
   )
 }
 

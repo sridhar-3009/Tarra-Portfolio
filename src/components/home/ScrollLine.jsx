@@ -249,13 +249,9 @@ export default function ScrollLine({ rootRef }) {
       return last.el.getPointAtLength(last.len)
     }
 
-    let lastKey = ''
     const rebuild = () => {
       const W = root.clientWidth
       const H = root.scrollHeight
-      const key = `${W}x${H}`
-      if (key === lastKey) return
-      lastKey = key
       const t0 = performance.now()
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
       svg.style.width = `${W}px`
@@ -388,8 +384,11 @@ export default function ScrollLine({ rootRef }) {
       clearTimeout(resizeTimer)
       resizeTimer = setTimeout(rebuild, 120)
     }
+    // Re-measure when the page or anything the line circles changes size
+    // (photos loading, the phone photo deck swapping in, fonts settling).
     const ro = new ResizeObserver(scheduleRebuild)
     ro.observe(root)
+    root.querySelectorAll('[data-line]').forEach((el) => ro.observe(el))
     window.addEventListener('scroll', tick, { passive: true })
     document.fonts?.ready.then(scheduleRebuild)
     rebuild()
