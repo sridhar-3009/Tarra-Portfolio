@@ -10,11 +10,15 @@ excerpt: Most of what an agent does all day is pick from a short list. Should I 
 
 # Your Agent Doesn't Need a Frontier Model to Decide What to Do Next
 
+*Short on time? Small "decider" models can take over the yes/no and pick-one-option decisions that AI agents make constantly. They answer in about a tenth of a second with a confidence score you can trust, and in early tests they handled around half the traffic of a support-ticket router for about a third less cost. The rest of this post explains how they work, what the numbers really say, and when you shouldn't use one.*
+
 If you've ever built an agent loop, you've probably noticed something a little embarrassing about it. Most of the LLM calls aren't doing anything clever. They're answering questions like "is this tool call safe to run?" or "which of these three tools fits?", questions where you already know every possible answer before you ask. You're paying a very large model to write a paragraph so that you can fish one word out of it.
 
 That quiet inefficiency is exactly what a new class of models is going after. AWS calls them **decision models**, and on October 1 its Strands Labs team open-sourced one called [Strands Decider 2B](https://strandsagents.com/blog/introducing-strands-decider/). It isn't alone, either. TypeSafe shipped Jev in September, Cloudflare has Clef running on Workers AI, and OpenAI has a Decisions API in beta (InfoWorld has [a good roundup](https://www.infoworld.com/article/4233075/as-ai-agents-grow-vendors-carve-out-decision-making-as-a-separate-model-layer.html)). Different companies, same idea: pull the small, boring, constant decisions out of the LLM and hand them to a model that was built for nothing else.
 
-I spent some time with the docs, the model card and the first independent write-ups, and the more I read, the more it felt like a missing piece of how we build agents.
+If you're new to this, here's an analogy that helped me. Asking a big LLM to make a simple decision is like setting someone an essay question when all you need is a multiple-choice answer. You get your answer eventually, but you also get three paragraphs you didn't need, you pay for every word, and occasionally the essay wanders off topic. A decider model is the multiple-choice version: it can only tick one of the boxes you give it, and it tells you how sure it is.
+
+I spent some time with the docs, the model card and the first independent write-ups, and the more I read, the more it felt like a missing piece of how we build agents. Whether you're a student just getting into AI or an engineer running agents in production, there's something useful here.
 
 ## A model that only ever answers the question
 
@@ -43,9 +47,9 @@ What I like about that output is everything that's missing from it. There's no c
 
 The speed comes from a design choice that I think is genuinely clever.
 
-A normal LLM answers by generating text one token at a time, running the whole network once for every token. Even when the answer is a single word like "billing", you've usually asked the model to explain its reasoning first, so you end up paying for a lot of tokens to get to that word.
+A normal LLM answers by generating text one token (roughly a word or part of a word) at a time, and it has to run the whole network once for every token. Each of those runs is called a forward pass. Even when the answer is a single word like "billing", you've usually asked the model to explain its reasoning first, so you end up paying for a lot of tokens to get to that word.
 
-Decider 2B never generates at all. Under the hood it's a [Qwen3.5-2B base model](https://huggingface.co/StrandsAgents/strands-decider-2B-hobson-v19) with a rank-16 LoRA adapter and a tiny readout head of about a million parameters sitting on top. Your request gets laid out like this:
+Decider 2B never generates at all. Under the hood it's a [Qwen3.5-2B base model](https://huggingface.co/StrandsAgents/strands-decider-2B-hobson-v19) with a rank-16 LoRA adapter, which is a small set of extra weights trained on top of the original model and a cheap way to specialise it, plus a tiny "readout head" of about a million parameters sitting on top. Your request gets laid out like this:
 
 ```
 <state>Help! My payouts have been failing for 3 days!</state>
@@ -54,11 +58,11 @@ Decider 2B never generates at all. Under the hood it's a [Qwen3.5-2B base model]
 <answer>
 ```
 
-The model reads that **once**. According to the [architecture docs](https://strandsagents.com/docs/labs/strands-decider/architecture/), the readout then takes the hidden state at the `<answer>` token as a query, compares it against the hidden state at the end of each option, and turns those scores into probabilities with a softmax. As the docs put it: "One forward pass, no generation, no decoding loop."
+The model reads that **once**. According to the [architecture docs](https://strandsagents.com/docs/labs/strands-decider/architecture/), the readout then takes the hidden state at the `<answer>` token (the model's internal summary of everything it has read up to that point) and compares it with the hidden state at the end of each option. The better an option matches, the higher its score, and a softmax turns those scores into probabilities that add up to 1. As the docs put it: "One forward pass, no generation, no decoding loop."
 
 That one design decision quietly solves two problems I've run into with LLMs. Because the options are shuffled on every training example, their order barely matters; reversing the list at inference shifts the probabilities by only about 0.016, so the model doesn't favour whatever you happened to list first. And because the state is encoded once and every question reads from it, asking several things about the same email ("which team?", "is this urgent?", "how annoyed are they?") costs barely more than asking one.
 
-The latency numbers back all of this up. The launch checkpoint answered in a median of 115 ms (with a p95 of 299 ms) on an RTX 3090, and 153 ms on an M3 Pro, according to the [README](https://github.com/strands-labs/strands-decider). On plain CPUs the story is very different, which I'll come back to.
+The latency numbers back all of this up. The launch checkpoint answered in a median of 115 ms on an RTX 3090, with a p95 of 299 ms (meaning 95% of requests finished faster than that), and 153 ms on an M3 Pro, according to the [README](https://github.com/strands-labs/strands-decider). On plain CPUs the story is very different, which I'll come back to.
 
 ## The number that makes it useful
 
@@ -74,7 +78,7 @@ confidence = (N · p_max − 1) / (N − 1)
 
 With three options, a top probability of one third, which is no better than guessing, gives a confidence of 0, while a top probability of 1 gives a confidence of 1. That's why "billing at 0.773" in the earlier example comes out as a confidence of 0.659.
 
-The README claims that answers with a confidence of 0.9 or more are right about 95% of the time on short classification tasks the model hasn't seen. On the public JevBench set of 231 tasks, the current reference model gets 180 right (77.9%), with a Brier score of 0.280 and an expected calibration error of 0.072, up from 167 (72.3%) for the launch version.
+The README claims that answers with a confidence of 0.9 or more are right about 95% of the time on short classification tasks the model hasn't seen. On the public JevBench set of 231 tasks, the current reference model gets 180 right (77.9%), up from 167 (72.3%) for the launch version. It also scores 0.280 on the Brier score, which measures the average squared gap between the predicted probability and what actually happened (0 is perfect), and 0.072 on expected calibration error, which is roughly how far its stated confidence drifts from its real accuracy on average.
 
 Those numbers deserve a little caution, and to their credit, the authors say so themselves. 231 tasks is a small benchmark, and they recommend treating any difference of fewer than about 10 tasks between two runs as unresolved. Calibration is also fitted with a single temperature per question type on short classification tasks, which is why the [model card](https://huggingface.co/StrandsAgents/strands-decider-2B-hobson-v19) bluntly tells you to measure on your own traffic before trusting any threshold.
 
@@ -82,7 +86,7 @@ Those numbers deserve a little caution, and to their credit, the authors say so 
 
 Launch posts always say a model is competitive, so the numbers I found more convincing came from two people who tested Decider themselves and wrote it up on AWS Builder Center.
 
-The first, [Akshay B](https://builder.aws.com/content/3KJvK45IGyUNQwRd4dSOZQWKv8I/running-strands-decider-2b-on-amazon-bedrock-agentcore-microvms-vs-gpu-instances), built 100 synthetic support messages for a made-up invoicing app and asked each model to route them to billing, technical, sales, account or unknown. On its own, with no examples, Decider got 72% right, while Claude Haiku 4.5 got 93%. On raw accuracy, the 2B model loses clearly, which is about what you'd expect.
+The first, [Akshay B](https://builder.aws.com/content/3KJvK45IGyUNQwRd4dSOZQWKv8I/running-strands-decider-2b-on-amazon-bedrock-agentcore-microvms-vs-gpu-instances), built 100 synthetic support messages for a made-up invoicing app and asked each model to route them to billing, technical, sales, account or unknown. On its own, with no examples to learn from (what people call zero-shot), Decider got 72% right, while Claude Haiku 4.5 got 93%. On raw accuracy, the 2B model loses clearly, which is about what you'd expect.
 
 Then he did the interesting thing and used the confidence number. Decider answered whenever it was confident enough and passed everything else to Haiku:
 
@@ -106,9 +110,9 @@ All of this would be easy to oversell, so it's worth being clear about what a de
 
 It doesn't reason. Answering in a single parallel pass makes these models "significantly worse at solving complex problems than reasoning models", as the [Strands blog](https://strandsagents.com/blog/introducing-strands-decider/) admits, so they're meant for routine decisions rather than hard ones. Long, multi-step documents are a known weak spot too, and according to the [model card](https://huggingface.co/StrandsAgents/strands-decider-2B-hobson-v19) the model "reads questions less than documents", which means rewording a question doesn't always change its answer.
 
-It also needs a GPU to feel fast. Akshay measured about 131 ms per decision on an L4 GPU, but 9.1 seconds on a CPU-only microVM with two virtual cores. It does run locally, but in practice you'll want a GPU, whether that's in a laptop or a proper instance.
+It also needs a GPU to feel fast. Akshay measured about 131 ms per decision on an L4 GPU, but 9.1 seconds on a CPU-only microVM, a small virtual machine with just two virtual cores. It does run locally, but in practice you'll want a GPU, whether that's in a laptop or a proper instance.
 
-Then there are the subtler issues. An analyst quoted by InfoWorld points out that a 0.8 from one vendor's model doesn't mean the same thing as a 0.8 from another's, so your thresholds won't carry over if you switch models. A probability also isn't a permission; as one Builder Center post puts it, a confidence score should never replace IAM permissions or business rules. And as H-E-B's Aditya Ranjan points out in the InfoWorld piece, a wrong decision can end up costing more downstream than the inference ever saved. Finally, it's still an experiment rather than a managed AWS service, and there are no named production users yet, as [Techstrong](https://techstrong.ai/articles/aws-explores-decision-models-with-strands-decider-2b/) notes.
+Then there are the subtler issues. An analyst quoted by InfoWorld points out that a 0.8 from one vendor's model doesn't mean the same thing as a 0.8 from another's, so your thresholds won't carry over if you switch models. A probability also isn't a permission; as one Builder Center post puts it, a confidence score should never replace IAM permissions (the access controls that decide who can do what) or business rules. And as H-E-B's Aditya Ranjan points out in the InfoWorld piece, a wrong decision can end up costing more downstream than the inference ever saved. Finally, it's still an experiment rather than a managed AWS service, and there are no named production users yet, as [Techstrong](https://techstrong.ai/articles/aws-explores-decision-models-with-strands-decider-2b/) notes.
 
 ## How I'd use one
 
@@ -139,6 +143,12 @@ def route(ticket: str) -> str:
 The thresholds are the part you have to earn. Run a few hundred real examples through it, plot accuracy against confidence, and choose the cut-offs from your own data rather than from mine.
 
 If I were starting today, I'd try two kinds of decision first. The first is the check an agent runs before every action, something like "is this tool call risky enough to need a human to approve it?" Because it runs on every single step, making it faster and cheaper adds up quickly. The second is sorting, the kind of question every inbox tool asks constantly: is this email urgent, is it a quote or a renewal, does it need a reply? Those are yes/no and choice questions with a known set of answers, which is exactly what a decider is built for.
+
+## Why it's worth your time
+
+If you're a student, this makes a great weekend project, and one that stands out on a CV. The model is small enough to run on a laptop with a decent GPU or an Apple-silicon Mac. Pick a classification task you care about, collect a couple of hundred labelled examples, and run them through it. Then draw a reliability diagram, which plots the model's stated confidence against how often it was actually right. If the points sit close to the diagonal, the model is well calibrated. Calibration rarely comes up in coursework projects, so being able to show it working is exactly the kind of thing interviewers love to dig into.
+
+If you're working in industry, the appeal is more practical. Every routine decision you move off a frontier model is cheaper, faster and more predictable, and the confidence score gives you something most LLM pipelines don't have: a principled way to decide when to trust the model and when to escalate. Start with one high-volume decision, measure it against what you run today, and let your own numbers decide whether it's worth expanding.
 
 ## The bigger picture
 
