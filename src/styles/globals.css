@@ -3,26 +3,26 @@
 /* ─── Sunny Palette ──────────────────────────────────────────────────────
    Tailwind's zinc / white / black resolve to these RGB triplets, so every
    existing utility class picks up the palette in both modes.
-   Light: friendly indigo ink on butter-cream paper. Dark: cream ink on deep
+   Light: friendly indigo ink on warm white paper. Dark: cream ink on deep
    indigo. Tangerine (accent) draws the line and small details; sunshine
    yellow (highlight) fills things on hover. */
 :root {
-  --c-white: 255 248 231;     /* butter cream */
+  --c-white: 253 251 246;     /* warm white */
   --c-black: 30 27 58;        /* deep indigo */
   --c-ink: 46 42 92;          /* indigo */
-  --c-paper: 255 248 231;
+  --c-paper: 253 251 246;
   --c-accent: 255 138 61;     /* tangerine */
-  --c-highlight: 255 209 102; /* sunshine */
+  --c-highlight: 255 224 140; /* soft sunshine */
   --c-on-highlight: 46 42 92;
-  --z-50: 255 248 231;
-  --z-100: 247 240 225;
-  --z-200: 213 207 203;
-  --z-300: 182 176 182;
-  --z-400: 139 135 155;
-  --z-500: 109 104 134;
-  --z-600: 84 79 117;
-  --z-700: 67 63 106;
-  --z-800: 56 52 99;
+  --z-50: 253 251 246;
+  --z-100: 245 243 240;
+  --z-200: 212 209 215;
+  --z-300: 180 178 192;
+  --z-400: 139 136 161;
+  --z-500: 108 105 138;
+  --z-600: 83 80 120;
+  --z-700: 67 63 107;
+  --z-800: 56 52 100;
   --z-900: 46 42 92;
   --z-950: 30 27 58;
   color-scheme: light;
@@ -32,9 +32,9 @@ html.dark {
   --c-ink: 255 244 223;
   --c-paper: 30 27 58;
   --c-accent: 255 160 92;
-  --c-highlight: 255 209 102;
+  --c-highlight: 255 214 120;
   --c-on-highlight: 30 27 58;
-  --z-50: 255 248 231;
+  --z-50: 253 251 246;
   --z-100: 255 244 223;
   --z-200: 233 222 207;
   --z-300: 210 201 190;

@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import { figureStrokes, FIGURE_W } from './figure'
-import portraitLines from '../../assets/portrait/lines.png'
+// The portrait differs by theme: with a light beard in light mode,
+// clean-shaven in dark mode.
+import portraitLight from '../../assets/portrait/lines-light.png'
+import portraitDark from '../../assets/portrait/lines-dark.png'
 
 // One hand-drawn line that runs down the whole home page and draws itself as
 // you scroll: it underlines the name, sketches the doodle in the hero, circles
@@ -267,13 +270,14 @@ export default function ScrollLine({ rootRef }) {
       introLen = 0
       let maxY = -Infinity
       const built = buildPath(root)
-      const img = svg.querySelector('#sl-ink image')
       if (built.fig) {
         const { x, y, w, h } = built.fig
-        img.setAttribute('x', x)
-        img.setAttribute('y', y)
-        img.setAttribute('width', w)
-        img.setAttribute('height', h)
+        svg.querySelectorAll('#sl-ink image').forEach((img) => {
+          img.setAttribute('x', x)
+          img.setAttribute('y', y)
+          img.setAttribute('width', w)
+          img.setAttribute('height', h)
+        })
         art.style.display = ''
       } else {
         art.style.display = 'none'
@@ -408,7 +412,8 @@ export default function ScrollLine({ rootRef }) {
           </mask>
           {/* The drawing itself: white ink on black */}
           <mask id="sl-ink" maskUnits="userSpaceOnUse" x="-5000" y="-5000" width="20000" height="40000">
-            <image href={portraitLines} preserveAspectRatio="none" />
+            <image href={portraitLight} preserveAspectRatio="none" className="dark:hidden" />
+            <image href={portraitDark} preserveAspectRatio="none" className="hidden dark:inline" />
           </mask>
         </defs>
         <g ref={artRef} mask="url(#sl-reveal)">
