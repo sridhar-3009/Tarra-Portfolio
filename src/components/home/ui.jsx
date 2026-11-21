@@ -41,7 +41,7 @@ export function Rows({ children }) {
 }
 
 // One row: optional meta (date) on the left, name + description, and an arrow.
-export function Row({ href, name, description, meta, arrow }) {
+export function Row({ href, name, description, meta, arrow, lineId }) {
   const internal = href?.startsWith('/')
   const content = (
     <div className="group flex items-start gap-4 py-4 sm:py-5">
@@ -50,7 +50,7 @@ export function Row({ href, name, description, meta, arrow }) {
           <span className="shrink-0 text-sm tabular-nums text-ink/70 sm:w-32 sm:pt-1">{meta}</span>
         )}
         <div className="min-w-0 grow">
-          <span className="font-display text-[clamp(1.15rem,1rem+0.8vw,1.5rem)] font-semibold leading-8 text-ink">
+          <span data-line={lineId} className="font-display text-[clamp(1.15rem,1rem+0.8vw,1.5rem)] font-semibold leading-8 text-ink">
             {name}
           </span>
           {description && <p className="mt-0.5 text-base leading-relaxed text-ink/80">{description}</p>}
