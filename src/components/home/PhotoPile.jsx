@@ -29,30 +29,29 @@ export default function PhotoPile({ photos }) {
     return () => ro.disconnect()
   }, [])
 
-  // Scatter the prints over a loose grid so they spread across the width:
-  // each sits in its own cell, nudged and tilted a little, overlapping its
-  // neighbours like photos tossed on a table.
+  // Uniform prints laid in tidy centred rows, each with a gentle alternating
+  // tilt and a little overlap, like polaroids pinned to a board. Same size and
+  // shape for every photo keeps it calm; the lightbox shows the full image.
   const isMobile = width < 640
-  const cols = isMobile ? 2 : 4
+  const cols = Math.min(4, photos.length)
   const cellW = width / cols
-  const printW = Math.min(isMobile ? 170 : 250, cellW * 1.15)
-  const rowH = printW * 0.95
+  const printW = Math.min(220, cellW * 0.92)
+  const printH = printW * 1.25
+  const rowStep = printH * 0.86
   const rows = Math.ceil(photos.length / cols)
 
   const layout = photos.map((_, i) => {
-    const ar = ratios[i] || 0.8
-    const h = printW / ar
     const row = Math.floor(i / cols)
-    // stagger odd rows so the pile doesn't look like a grid
-    const col = (i % cols) + (row % 2 ? 0.5 : 0)
-    const cx = Math.min(width - printW / 2, Math.max(printW / 2, (col + 0.5) * cellW))
-    const x = Math.min(width - printW, Math.max(0, cx - printW / 2 + (seeded(i, 1) - 0.5) * cellW * 0.25))
-    const y = row * rowH + (seeded(i, 2) - 0.5) * 30 + (rowH - Math.min(h, rowH * 1.2)) / 2
-    const r = (seeded(i, 3) - 0.5) * 14
+    const inRow = Math.min(cols, photos.length - row * cols)
+    const c = i - row * cols
+    const startX = (width - inRow * cellW) / 2
+    const x = startX + c * cellW + (cellW - printW) / 2 + (seeded(i, 1) - 0.5) * 18
+    const y = row * rowStep + (seeded(i, 2) - 0.5) * 16 + (c % 2 ? 10 : 0)
+    const r = (i % 2 ? 1 : -1) * (2 + seeded(i, 3) * 3)
     const off = offsets[i] || { x: 0, y: 0 }
-    return { x: x + off.x, y: y + off.y, r, ar, h }
+    return { x: x + off.x, y: y + off.y, r, ar: 0.8, h: printH }
   })
-  const pileH = Math.max(...layout.map((p) => p.y - (offsets[layout.indexOf(p)]?.y || 0) + p.h), rows * rowH) + 20
+  const pileH = (rows - 1) * rowStep + printH + 30
 
   const bringToFront = (i) => setOrder((o) => [...o.filter((j) => j !== i), i])
 
