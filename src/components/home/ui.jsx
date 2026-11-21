@@ -1,7 +1,33 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { motion, useReducedMotion } from 'framer-motion'
 
-// Shared building blocks for the cream & cobalt home page.
+// Shared building blocks for the home page.
+
+const EASE = [0.2, 0.8, 0.2, 1]
+
+// Fades children in as they scroll into view. `slide` adds a small rise; leave
+// it off for anything the scroll line measures (data-line anchors), since a
+// transform would shift where the line circles it.
+export function Reveal({ children, delay = 0, slide = true, className = '', as = 'div' }) {
+  const reduce = useReducedMotion()
+  const M = motion[as]
+  if (reduce) {
+    const Tag = as
+    return <Tag className={className}>{children}</Tag>
+  }
+  return (
+    <M
+      className={className}
+      initial={{ opacity: 0, y: slide ? 18 : 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '0px 0px -12% 0px' }}
+      transition={{ duration: 0.7, ease: EASE, delay }}
+    >
+      {children}
+    </M>
+  )
+}
 
 export function SectionTitle({ id, children, className = '' }) {
   return (
@@ -14,8 +40,9 @@ export function SectionTitle({ id, children, className = '' }) {
   )
 }
 
+// Pills fill with coral from the bottom on hover.
 const pill =
-  'inline-flex items-center justify-center gap-1.5 rounded-full border border-ink bg-paper px-6 pb-2 pt-[calc(0.5rem+1px)] font-display text-base font-semibold uppercase tracking-wide text-ink no-underline transition-colors duration-150 hover:border-lavender hover:bg-lavender hover:text-[#0033e6] focus-visible:border-lavender focus-visible:bg-lavender focus-visible:text-[#0033e6]'
+  'relative isolate inline-flex items-center justify-center gap-1.5 overflow-hidden rounded-full border border-ink bg-paper px-6 pb-2 pt-[calc(0.5rem+1px)] font-display text-base font-semibold uppercase tracking-wide text-ink no-underline transition-[color,border-color,transform] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:translate-y-full before:rounded-full before:bg-accent before:transition-transform before:duration-300 before:ease-out hover:-translate-y-0.5 hover:border-accent hover:text-on-accent hover:before:translate-y-0 focus-visible:border-accent focus-visible:text-on-accent focus-visible:before:translate-y-0 active:translate-y-0'
 
 // Router paths ("/projects") use <Link>; http(s) links open in a new tab;
 // anything else (hash links, mailto:, tel:, downloads) is a plain anchor.
@@ -40,8 +67,24 @@ export function Rows({ children }) {
   return <ul className="w-full [&>li]:border-t [&>li]:border-ink [&>li:last-child]:border-b">{children}</ul>
 }
 
+// A row's content fades in shortly after the one above it.
+function RowFade({ i = 0, children }) {
+  const reduce = useReducedMotion()
+  if (reduce) return children
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+      transition={{ duration: 0.6, ease: EASE, delay: Math.min(i, 6) * 0.07 }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
 // One row: optional meta (date) on the left, name + description, and an arrow.
-export function Row({ href, name, description, meta, arrow, lineId }) {
+export function Row({ href, name, description, meta, arrow, lineId, i = 0 }) {
   const internal = href?.startsWith('/')
   const content = (
     <div className="group flex items-start gap-4 py-4 sm:py-5">
@@ -57,20 +100,20 @@ export function Row({ href, name, description, meta, arrow, lineId }) {
         </div>
       </div>
       {href && (
-        <span className="shrink-0 pt-0.5 font-display text-2xl leading-8 text-ink transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-0.5">
+        <span className="shrink-0 pt-0.5 font-display text-2xl leading-8 text-ink transition-[transform,color] duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5 group-hover:text-accent">
           {arrow || (internal ? '→' : '↗')}
         </span>
       )}
     </div>
   )
 
-  if (!href) return <li>{content}</li>
+  if (!href) return <li><RowFade i={i}>{content}</RowFade></li>
   return (
-    <li className="transition-colors hover:bg-lavender/40">
+    <li className="relative isolate before:absolute before:inset-0 before:-z-10 before:origin-left before:scale-x-0 before:bg-accent/15 before:transition-transform before:duration-500 before:ease-out hover:before:scale-x-100">
       {internal ? (
-        <Link to={href} className="block px-1">{content}</Link>
+        <Link to={href} className="block px-1"><RowFade i={i}>{content}</RowFade></Link>
       ) : (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="block px-1">{content}</a>
+        <a href={href} target="_blank" rel="noopener noreferrer" className="block px-1"><RowFade i={i}>{content}</RowFade></a>
       )}
     </li>
   )
@@ -78,7 +121,7 @@ export function Row({ href, name, description, meta, arrow, lineId }) {
 
 export function TextLink({ to, children }) {
   return (
-    <Link to={to} className="font-semibold text-ink underline decoration-ink/40 decoration-2 underline-offset-4 hover:decoration-ink">
+    <Link to={to} className="font-semibold text-ink underline decoration-accent decoration-2 underline-offset-4 transition-colors hover:text-accent">
       {children}
     </Link>
   )

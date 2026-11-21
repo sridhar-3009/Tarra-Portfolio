@@ -176,15 +176,15 @@ function Lightbox({ photos, index, onChange, onClose }) {
         </figcaption>
       </figure>
 
-      <button type="button" aria-label="Close" onClick={onClose} className="absolute right-4 top-4 rounded-full border border-ink bg-paper p-2 text-ink hover:bg-lavender hover:border-lavender hover:text-[#0033e6] transition-colors">
+      <button type="button" aria-label="Close" onClick={onClose} className="absolute right-4 top-4 rounded-full border border-ink bg-paper p-2 text-ink hover:bg-accent hover:border-accent hover:text-on-accent transition-colors">
         <FiX className="h-5 w-5" />
       </button>
       {photos.length > 1 && (
         <>
-          <button type="button" aria-label="Previous photo" onClick={(e) => { e.stopPropagation(); prev() }} className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 rounded-full border border-ink bg-paper p-2 text-ink hover:bg-lavender hover:border-lavender hover:text-[#0033e6] transition-colors">
+          <button type="button" aria-label="Previous photo" onClick={(e) => { e.stopPropagation(); prev() }} className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 rounded-full border border-ink bg-paper p-2 text-ink hover:bg-accent hover:border-accent hover:text-on-accent transition-colors">
             <FiChevronLeft className="h-5 w-5" />
           </button>
-          <button type="button" aria-label="Next photo" onClick={(e) => { e.stopPropagation(); next() }} className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 rounded-full border border-ink bg-paper p-2 text-ink hover:bg-lavender hover:border-lavender hover:text-[#0033e6] transition-colors">
+          <button type="button" aria-label="Next photo" onClick={(e) => { e.stopPropagation(); next() }} className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 rounded-full border border-ink bg-paper p-2 text-ink hover:bg-accent hover:border-accent hover:text-on-accent transition-colors">
             <FiChevronRight className="h-5 w-5" />
           </button>
         </>

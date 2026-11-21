@@ -1,41 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap');
 
-/* ─── Cream & Cobalt Palette ─────────────────────────────────────────────
+/* ─── Stone, Forest & Coral Palette ──────────────────────────────────────
    Tailwind's zinc / white / black resolve to these RGB triplets, so every
-   existing utility class picks up the palette in both modes. */
+   existing utility class picks up the palette in both modes.
+   Light: deep forest ink on warm stone paper. Dark: cream ink on near-black
+   green. Coral is the accent for hovers, highlights and the pencil. */
 :root {
-  --c-white: 255 246 234;   /* cream paper */
-  --c-black: 24 27 35;      /* navy */
-  --c-ink: 0 51 230;        /* cobalt */
-  --c-paper: 255 246 234;
-  --z-50: 255 246 234;
-  --z-100: 255 238 216;
-  --z-200: 204 207 233;
-  --z-300: 166 178 233;
-  --z-400: 115 139 232;
-  --z-500: 77 110 231;
-  --z-600: 46 86 231;
-  --z-700: 26 71 230;
-  --z-800: 13 61 230;
-  --z-900: 0 51 230;
-  --z-950: 0 41 184;
+  --c-white: 244 241 234;   /* stone paper */
+  --c-black: 15 20 18;      /* night green */
+  --c-ink: 30 58 52;        /* forest */
+  --c-paper: 244 241 234;
+  --c-accent: 255 107 74;   /* coral */
+  --c-on-accent: 22 32 29;
+  --z-50: 244 241 234;
+  --z-100: 236 232 222;
+  --z-200: 201 204 198;
+  --z-300: 169 177 170;
+  --z-400: 126 140 134;
+  --z-500: 94 113 106;
+  --z-600: 68 91 84;
+  --z-700: 51 76 69;
+  --z-800: 40 67 60;
+  --z-900: 30 58 52;
+  --z-950: 20 42 37;
   color-scheme: light;
 }
 
 html.dark {
-  --c-ink: 255 238 216;
-  --c-paper: 24 27 35;
-  --z-50: 255 246 234;
-  --z-100: 255 238 216;
-  --z-200: 230 224 216;
-  --z-300: 201 211 255;
-  --z-400: 163 182 255;
-  --z-500: 141 147 166;
-  --z-600: 106 113 134;
-  --z-700: 69 75 92;
-  --z-800: 47 52 66;
-  --z-900: 33 37 47;
-  --z-950: 24 27 35;
+  --c-ink: 233 228 216;
+  --c-paper: 15 20 18;
+  --c-accent: 255 138 107;
+  --c-on-accent: 15 20 18;
+  --z-50: 244 241 234;
+  --z-100: 233 228 216;
+  --z-200: 220 218 208;
+  --z-300: 200 202 192;
+  --z-400: 170 175 166;
+  --z-500: 130 138 131;
+  --z-600: 95 105 99;
+  --z-700: 60 70 65;
+  --z-800: 38 46 42;
+  --z-900: 24 30 27;
+  --z-950: 15 20 18;
   color-scheme: dark;
 }
 
@@ -46,8 +52,8 @@ body {
 }
 
 ::selection {
-  background: #c8b5ff;
-  color: #0033e6;
+  background: rgb(var(--c-accent));
+  color: rgb(var(--c-on-accent));
 }
 
 html .prose {

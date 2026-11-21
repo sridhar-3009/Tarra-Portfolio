@@ -417,7 +417,7 @@ export default function ScrollLine({ rootRef }) {
         <g
           ref={groupRef}
           fill="none"
-          className="stroke-ink"
+          className="stroke-accent"
           strokeWidth="3.2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -428,8 +428,8 @@ export default function ScrollLine({ rootRef }) {
         <svg width="46" height="16" viewBox="0 -8 46 16" className="block" style={{ transform: 'translateY(-8px)' }}>
           <path d="M0 0 L11 -5.5 L11 5.5 Z" className="fill-paper stroke-ink" strokeWidth="1.6" strokeLinejoin="round" />
           <path d="M0 0 L4 -2 L4 2 Z" className="fill-ink" />
-          <rect x="11" y="-5.5" width="26" height="11" rx="1" className="fill-ink" />
-          <rect x="37" y="-5.5" width="7" height="11" rx="2" className="fill-lavender stroke-ink" strokeWidth="1.4" />
+          <rect x="11" y="-5.5" width="26" height="11" rx="1" className="fill-accent" />
+          <rect x="37" y="-5.5" width="7" height="11" rx="2" className="fill-paper stroke-ink" strokeWidth="1.4" />
         </svg>
       </div>
     </>

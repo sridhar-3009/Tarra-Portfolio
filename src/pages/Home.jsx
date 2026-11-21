@@ -9,7 +9,8 @@ import { agentSkills } from '../data/agentSkills'
 import { photos } from '../data/photos'
 import { blogPosts } from '../blog'
 import { formatDate } from '../utils/blogUtils'
-import { SectionTitle, Pill, Rows, Row, TextLink } from '../components/home/ui'
+import { motion, useReducedMotion } from 'framer-motion'
+import { SectionTitle, Pill, Rows, Row, TextLink, Reveal } from '../components/home/ui'
 import PhotoPile from '../components/home/PhotoPile'
 import ScrollLine from '../components/home/ScrollLine'
 import Eyes from '../components/home/Eyes'
@@ -20,6 +21,12 @@ const HOME_PROJECTS = 4
 export default function Home() {
   const location = useLocation()
   const rootRef = useRef(null)
+  const reduce = useReducedMotion()
+  // Hero copy rises in one line after another while the pencil draws.
+  const intro = (i) =>
+    reduce
+      ? {}
+      : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.7, ease: [0.2, 0.8, 0.2, 1], delay: 0.35 + i * 0.12 } }
 
   useEffect(() => {
     const target = location.state?.scrollTo
@@ -68,30 +75,44 @@ export default function Home() {
             className="order-2 mx-auto aspect-[400/540] w-full max-w-[17rem] md:order-1 md:max-w-none"
           />
           <div className="order-1 md:order-2">
-            <Eyes className="mb-4 w-24 sm:w-28" />
-            <h1 className="font-display font-extrabold text-ink text-[clamp(2.75rem,1.6rem+3.6vw,4.5rem)] leading-[1.02] tracking-[-0.01em] mb-8">
+            <motion.div {...intro(0)}>
+              <Eyes className="mb-4 w-24 sm:w-28" />
+            </motion.div>
+            {/* Opacity only: the scroll line measures the name to underline it. */}
+            <motion.h1
+              {...(reduce ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.8, delay: 0.2 } })}
+              className="font-display font-extrabold text-ink text-[clamp(2.75rem,1.6rem+3.6vw,4.5rem)] leading-[1.02] tracking-[-0.01em] mb-8"
+            >
               <span data-line="lead" className="inline-block">Hi, I&apos;m Sai.</span>
-            </h1>
+            </motion.h1>
             <div className="space-y-4 text-lg leading-relaxed text-ink">
-              <p>I live in Edinburgh. I build backend systems and I&apos;m into machine learning.</p>
-              <p>
+              <motion.p {...intro(1)}>I live in Edinburgh. I build backend systems and I&apos;m into machine learning.</motion.p>
+              <motion.p {...intro(2)}>
                 Right now I&apos;m doing an MSc in Statistics with Data Science at the University of Edinburgh.
                 Before that I spent 2.5+ years as a Software Engineer at Accenture, making C++ and Python services
                 faster for a banking client.
-              </p>
-              <p className="text-ink/80">{personal.availability}.</p>
+              </motion.p>
+              <motion.p {...intro(3)} className="flex items-center gap-2 text-ink/80">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60 motion-reduce:animate-none" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
+                </span>
+                {personal.availability}.
+              </motion.p>
             </div>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <motion.div {...intro(4)} className="mt-8 flex flex-wrap gap-3">
               <Pill href={personal.resume} download>Résumé ↓</Pill>
               <Pill href="#book-a-call">Book a call</Pill>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* MailAir */}
         <section aria-labelledby="mailair-title" className="max-w-3xl">
-          <SectionTitle id="mailair-title" className="mb-5">I&apos;m building <span data-line="mailair" className="inline-block">MailAir</span></SectionTitle>
-          <div className="space-y-4 text-lg leading-relaxed text-ink">
+          <Reveal slide={false}>
+            <SectionTitle id="mailair-title" className="mb-5">I&apos;m building <span data-line="mailair" className="inline-block">MailAir</span></SectionTitle>
+          </Reveal>
+          <Reveal delay={0.1} className="space-y-4 text-lg leading-relaxed text-ink">
             <p>
               MailAir gives small teams one place to run their customer communication: email campaigns and
               follow-up sequences, a shared Gmail and Outlook inbox, and docs, files, chat, and calls in one
@@ -103,15 +124,17 @@ export default function Home() {
               own voice. I lead product and engineering, and built it end to end with Next.js, FastAPI, Supabase,
               and React Native.
             </p>
-          </div>
+          </Reveal>
         </section>
 
         {/* Things I made */}
         <section id="projects" aria-labelledby="things-title" className="scroll-mt-24">
-          <SectionTitle id="things-title" className="mb-8 text-center"><span data-line="things">Some things I made</span></SectionTitle>
+          <Reveal slide={false}>
+            <SectionTitle id="things-title" className="mb-8 text-center"><span data-line="things">Some things I made</span></SectionTitle>
+          </Reveal>
           <Rows>
             {things.map((t, i) => (
-              <Row key={t.id} href={t.href} name={t.name} description={t.description} lineId={i === 0 ? 'first-thing' : undefined} />
+              <Row key={t.id} i={i} href={t.href} name={t.name} description={t.description} lineId={i === 0 ? 'first-thing' : undefined} />
             ))}
           </Rows>
           {moreCount > 0 && (
@@ -123,11 +146,14 @@ export default function Home() {
 
         {/* Experience */}
         <section id="experience" aria-labelledby="experience-title" className="scroll-mt-24">
-          <SectionTitle id="experience-title" className="mb-8"><span data-line="experience">Where I&apos;ve been</span></SectionTitle>
+          <Reveal slide={false}>
+            <SectionTitle id="experience-title" className="mb-8"><span data-line="experience">Where I&apos;ve been</span></SectionTitle>
+          </Reveal>
           <Rows>
-            {experiences.map((e) => (
+            {experiences.map((e, i) => (
               <Row
                 key={e.id}
+                i={i}
                 meta={e.period.replace(/ – /, '–')}
                 name={`${e.role}, ${e.company.split(' – ')[0]}`}
                 description={e.description}
@@ -139,10 +165,12 @@ export default function Home() {
         {/* Writing */}
         {blogPosts.length > 0 && (
           <section aria-labelledby="writing-title">
-            <SectionTitle id="writing-title" className="mb-8"><span data-line="writing">Things I wrote</span></SectionTitle>
+            <Reveal slide={false}>
+              <SectionTitle id="writing-title" className="mb-8"><span data-line="writing">Things I wrote</span></SectionTitle>
+            </Reveal>
             <Rows>
-              {blogPosts.slice(0, 5).map((post) => (
-                <Row key={post.slug} href={`/blog/${post.slug}`} meta={formatDate(post.date)} name={post.title} />
+              {blogPosts.slice(0, 5).map((post, i) => (
+                <Row key={post.slug} i={i} href={`/blog/${post.slug}`} meta={formatDate(post.date)} name={post.title} />
               ))}
             </Rows>
             <p className="mt-6 text-lg text-ink">
@@ -174,10 +202,12 @@ export default function Home() {
 
         {/* Say hi */}
         <section id="contact" aria-labelledby="hi-title" className="scroll-mt-24 text-center">
-          <SectionTitle id="hi-title" className="mb-3">Say hi</SectionTitle>
-          <p className="mx-auto mb-8 max-w-xl text-lg text-ink">
-            Email is the best way to reach me. I&apos;m open to software engineering and ML roles in the UK.
-          </p>
+          <Reveal>
+            <SectionTitle id="hi-title" className="mb-3">Say hi</SectionTitle>
+            <p className="mx-auto mb-8 max-w-xl text-lg text-ink">
+              Email is the best way to reach me. I&apos;m open to software engineering and ML roles in the UK.
+            </p>
+          </Reveal>
           <div data-line="links" className="mx-auto flex max-w-xl flex-wrap justify-center gap-3">
             <Pill href={`mailto:${personal.email}`}><FiMail /> Email</Pill>
             <Pill href={`tel:${personal.phone.replace(/\s/g, '')}`}><FiPhone /> Call</Pill>

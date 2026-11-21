@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Cream & cobalt palette: zinc/white/black map to CSS variables that
+        // Stone / forest / coral palette: zinc/white/black map to CSS variables that
         // switch between light and dark mode (see globals.css).
         zinc: {
           50: 'rgb(var(--z-50) / <alpha-value>)',
@@ -27,7 +27,8 @@ export default {
         black: 'rgb(var(--c-black) / <alpha-value>)',
         ink: 'rgb(var(--c-ink) / <alpha-value>)',
         paper: 'rgb(var(--c-paper) / <alpha-value>)',
-        lavender: '#c8b5ff',
+        accent: 'rgb(var(--c-accent) / <alpha-value>)',
+        'on-accent': 'rgb(var(--c-on-accent) / <alpha-value>)',
         dark: {
           DEFAULT: '#0D0D0D',
           50: '#141414',
