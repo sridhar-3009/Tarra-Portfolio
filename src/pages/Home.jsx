@@ -165,23 +165,6 @@ export default function Home() {
           </Rows>
         </section>
 
-        {/* Writing */}
-        {blogPosts.length > 0 && (
-          <section aria-labelledby="writing-title">
-            <Reveal slide={false}>
-              <SectionTitle id="writing-title" className="mb-8"><span data-line="writing"><Bouncy text="Things I wrote" inView /></span></SectionTitle>
-            </Reveal>
-            <Rows>
-              {blogPosts.slice(0, 5).map((post, i) => (
-                <Row key={post.slug} i={i} href={`/blog/${post.slug}`} meta={formatDate(post.date)} name={post.title} />
-              ))}
-            </Rows>
-            <p className="mt-6 text-lg text-ink">
-              <TextLink to="/blog">All {blogPosts.length} articles →</TextLink>
-            </p>
-          </section>
-        )}
-
         {/* Camera roll */}
         <section id="photos" aria-labelledby="photos-title" className="scroll-mt-24">
           <Reveal slide={false} className="mb-10 text-center">
@@ -201,6 +184,23 @@ export default function Home() {
             {photos.length > 0 ? <PhotoPile photos={photos} /> : <EmptyPrints />}
           </div>
         </section>
+
+        {/* Writing */}
+        {blogPosts.length > 0 && (
+          <section aria-labelledby="writing-title">
+            <Reveal slide={false}>
+              <SectionTitle id="writing-title" className="mb-8"><span data-line="writing"><Bouncy text="Things I wrote" inView /></span></SectionTitle>
+            </Reveal>
+            <Rows>
+              {blogPosts.slice(0, 5).map((post, i) => (
+                <Row key={post.slug} i={i} href={`/blog/${post.slug}`} meta={formatDate(post.date)} name={post.title} />
+              ))}
+            </Rows>
+            <p className="mt-6 text-lg text-ink">
+              <TextLink to="/blog">All {blogPosts.length} articles →</TextLink>
+            </p>
+          </section>
+        )}
 
         {/* Book a call */}
         <div data-line="call">

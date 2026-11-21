@@ -169,30 +169,30 @@ function buildPath(root) {
     go([L, first.b + 40])
   }
 
-  // 5. Squiggle in above each later section, alternating sides.
+  // 5–6. Later sections in page order: squiggle in above each heading
+  // (alternating sides) and loop a big circle around the photo pile.
   let side = 'L'
-  ;['experience', 'writing'].forEach((name) => {
-    const b = box(name)
-    if (!b) return
-    const y = b.y - 46
-    const from = side === 'L' ? L : R
-    const to = side === 'L' ? R : L
-    go([from, y - 60])
-    wave(from + (side === 'L' ? 10 : -10), to + (side === 'L' ? -10 : 10), y, 7)
-    go([to, b.b + 20])
-    side = side === 'L' ? 'R' : 'L'
-  })
-  const laneX = side === 'L' ? L : R
-
-  // 6. A big loose circle around the photo pile.
-  const pile = box('pile')
-  let x = laneX
-  if (pile) {
-    go([laneX, pile.y - 80])
-    circle(pile, { padX: Math.min(30, gutter * 0.4 + 6), padY: 22, turns: 1.05, start: laneX < 0 ? -2.6 : -0.5 })
-    x = cur[cur.length - 1][0] < W / 2 ? L : R
-    go([x, pile.b + 60])
-  }
+  ;['experience', 'writing', 'pile']
+    .map((name) => ({ name, b: box(name) }))
+    .filter((s) => s.b)
+    .sort((a, b) => a.b.y - b.b.y)
+    .forEach(({ name, b }) => {
+      const from = side === 'L' ? L : R
+      if (name === 'pile') {
+        go([from, b.y - 80])
+        circle(b, { padX: Math.min(30, gutter * 0.4 + 6), padY: 22, turns: 1.05, start: from < 0 ? -2.6 : -0.5 })
+        side = cur[cur.length - 1][0] < W / 2 ? 'L' : 'R'
+        go([side === 'L' ? L : R, b.b + 60])
+        return
+      }
+      const y = b.y - 46
+      const to = side === 'L' ? R : L
+      go([from, y - 60])
+      wave(from + (side === 'L' ? 10 : -10), to + (side === 'L' ? -10 : 10), y, 7)
+      go([to, b.b + 20])
+      side = side === 'L' ? 'R' : 'L'
+    })
+  const x = side === 'L' ? L : R
 
   // 7. Down a lane past the call card, then loop around the contact links.
   const call = box('call')
