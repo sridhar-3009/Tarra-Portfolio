@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { FiArrowUpRight, FiGithub } from 'react-icons/fi'
 import { agentSkills } from '../data/agentSkills'
+import { Bouncy, Sparkle } from '../components/home/ui'
 
 export default function AgentSkillsPage() {
   return (
@@ -24,8 +25,9 @@ export default function AgentSkillsPage() {
           <span>/</span>
           <span className="text-zinc-900 dark:text-white font-semibold">Agent Skills</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-          Agent Skills
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white relative inline-block">
+          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+          <Bouncy text="Agent Skills" />
         </h1>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed font-normal">
           Skills I&apos;ve built for AI coding agents. They work with Claude Code, Cursor, and other agents that support the SKILL.md format.
@@ -40,7 +42,7 @@ export default function AgentSkillsPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: idx * 0.05 }}
-            className="p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/90 shadow-sm space-y-4"
+            className="p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/90 shadow-sm space-y-4 hover:-translate-y-1 hover:shadow-[0_14px_30px_-14px_rgb(var(--c-accent)/0.55)] transition-all duration-300"
           >
             <div className="space-y-2">
               <div className="flex flex-wrap items-center justify-between gap-2">

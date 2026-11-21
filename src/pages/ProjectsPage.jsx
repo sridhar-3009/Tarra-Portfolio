@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { projects } from '../data/projects'
 import { agentSkills } from '../data/agentSkills'
-import { Rows, Row, SectionTitle } from '../components/home/ui'
+import { Rows, Row, SectionTitle, Bouncy, Sparkle } from '../components/home/ui'
 
 export default function ProjectsPage() {
   return (
@@ -15,8 +15,9 @@ export default function ProjectsPage() {
 
       <header>
         <Link to="/" className="text-ink/70 hover:text-ink">← Home</Link>
-        <h1 className="mt-4 font-display font-extrabold text-ink text-[clamp(2.75rem,1.6rem+3.6vw,4.5rem)] leading-[1.02] tracking-[-0.01em]">
-          Projects
+        <h1 className="mt-4 font-display font-extrabold text-ink text-[clamp(2.75rem,1.6rem+3.6vw,4.5rem)] leading-[1.02] tracking-[-0.01em] relative inline-block">
+          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+          <Bouncy text="Projects" />
         </h1>
       </header>
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -10,6 +10,7 @@ import { FiArrowLeft, FiCalendar, FiClock, FiTwitter, FiLinkedin, FiLink } from 
 import 'highlight.js/styles/github-dark.css'
 import { getPostBySlug } from '../blog'
 import { formatDate } from '../utils/blogUtils'
+import { Bouncy, Sparkle } from '../components/home/ui'
 
 export default function BlogPostPage() {
   const { slug } = useParams()
@@ -43,6 +44,7 @@ export default function BlogPostPage() {
       transition={{ duration: 0.35 }}
       className="space-y-6"
     >
+      <ReadingProgress />
       <Helmet>
         <title>{`${post.title} | Sai Sridhar Tarra`}</title>
         <meta name="description" content={post.excerpt} />
@@ -64,8 +66,9 @@ export default function BlogPostPage() {
 
       {/* Article Header */}
       <div className="space-y-3">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white leading-snug">
-          {post.title}
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white leading-snug relative">
+          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+          <Bouncy text={post.title} step={0.012} />
         </h1>
 
         <div className="flex flex-wrap items-center gap-4 font-mono text-xs text-zinc-500 dark:text-zinc-400">
@@ -134,5 +137,18 @@ export default function BlogPostPage() {
         </Link>
       </div>
     </motion.article>
+  )
+}
+
+// A tangerine bar across the top that fills as you read.
+function ReadingProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 140, damping: 26, restDelta: 0.001 })
+  return (
+    <motion.div
+      aria-hidden="true"
+      className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-accent"
+      style={{ scaleX }}
+    />
   )
 }

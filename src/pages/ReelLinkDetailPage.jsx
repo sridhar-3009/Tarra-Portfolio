@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { FiExternalLink, FiArrowLeft } from 'react-icons/fi'
 import { getBySlug } from '../data/reelLinks'
+import { Bouncy, Sparkle } from '../components/home/ui'
 
 export default function ReelLinkDetailPage() {
   const { slug } = useParams()
@@ -46,9 +47,10 @@ export default function ReelLinkDetailPage() {
       <div className="p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/90 space-y-6 shadow-sm">
         <div className="space-y-2">
           <span className="font-mono text-xs text-zinc-500">Published {item.date}</span>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-            {item.title}
-          </h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white relative">
+          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+          <Bouncy text={item.title} step={0.02} />
+        </h1>
         </div>
 
         <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">

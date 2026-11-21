@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async'
 import { FiSearch, FiCalendar, FiClock, FiArrowRight } from 'react-icons/fi'
 import { blogPosts, getAllCategories } from '../blog'
 import { formatDate } from '../utils/blogUtils'
+import { Bouncy, Sparkle } from '../components/home/ui'
 
 export default function BlogListPage() {
   const [query, setQuery] = useState('')
@@ -44,8 +45,9 @@ export default function BlogListPage() {
           <span>/</span>
           <span className="text-zinc-900 dark:text-white font-semibold">Articles</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-          Articles & Technical Notes
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white relative inline-block">
+          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+          <Bouncy text="Articles & Technical Notes" />
         </h1>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed font-normal">
           Deep dives into Machine Learning research, MLOps architecture, LLMs, and real-world software engineering challenges.
@@ -102,7 +104,7 @@ export default function BlogListPage() {
               >
                 <Link
                   to={`/blog/${post.slug}`}
-                  className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/90 hover:bg-zinc-50 dark:hover:bg-zinc-900/90 transition-all duration-300 shadow-sm flex flex-col justify-between space-y-3 block"
+                  className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/90 hover:bg-zinc-50 dark:hover:bg-zinc-900/90 transition-all duration-300 shadow-sm flex flex-col justify-between space-y-3 block hover:-translate-y-1 hover:shadow-[0_14px_30px_-14px_rgb(var(--c-accent)/0.55)]"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">

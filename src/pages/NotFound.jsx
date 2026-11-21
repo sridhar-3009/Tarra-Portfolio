@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { FiHome, FiArrowLeft } from 'react-icons/fi'
+import Eyes from '../components/home/Eyes'
+import { Bouncy, Sparkle } from '../components/home/ui'
 
 export default function NotFound() {
   return (
@@ -10,11 +12,14 @@ export default function NotFound() {
       </Helmet>
 
       <div className="space-y-2">
-        <h1 className="font-mono text-6xl sm:text-8xl font-black text-zinc-900 dark:text-white">
-          404
+        <Eyes className="mx-auto mb-2 w-24" />
+        <h1 className="relative inline-block font-display text-6xl sm:text-8xl font-extrabold text-ink">
+          <Sparkle className="-left-6 top-2 text-highlight" size={22} />
+          <Sparkle className="-right-7 top-6 text-accent" size={16} delay={1} />
+          <Bouncy text="404" step={0.12} />
         </h1>
         <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white">
-          Lost in latent space.
+          Lost in latent space. The eyes are looking for it too.
         </h2>
         <p className="text-xs sm:text-sm font-mono text-zinc-500 max-w-sm mx-auto leading-relaxed">
           The requested route could not be found or has moved. Let&apos;s get you back on track.

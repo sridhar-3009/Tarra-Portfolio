@@ -42,7 +42,7 @@ export function SectionTitle({ id, children, className = '' }) {
 
 // Text whose letters drop in one by one, then wobble when you hover them.
 // Only the letters move, so a data-line anchor around it keeps its box.
-export function Bouncy({ text, delay = 0, inView = false }) {
+export function Bouncy({ text, delay = 0, inView = false, step = 0.035 }) {
   const reduce = useReducedMotion()
   const words = text.split(' ')
   let n = 0
@@ -59,7 +59,7 @@ export function Bouncy({ text, delay = 0, inView = false }) {
                 className="letter inline-block"
                 initial={reduce ? false : { y: '0.55em', opacity: 0, rotate: i % 2 ? 8 : -8 }}
                 {...(inView ? { whileInView: enter, viewport: { once: true } } : { animate: enter })}
-                transition={{ type: 'spring', stiffness: 420, damping: 18, delay: delay + i * 0.035 }}
+                transition={{ type: 'spring', stiffness: 420, damping: 18, delay: delay + i * step }}
               >
                 {ch}
               </motion.span>

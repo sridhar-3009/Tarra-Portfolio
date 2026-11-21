@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { FiPlay, FiExternalLink, FiYoutube, FiX, FiCalendar } from 'react-icons/fi'
 import { useYouTubeVideos } from '../hooks/useYouTubeVideos'
+import { Bouncy, Sparkle } from '../components/home/ui'
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-IN', {
@@ -122,7 +123,7 @@ function VideoCard({ video, index, onClick }) {
       </div>
 
       {/* Info */}
-      <h3 className="text-sm font-semibold text-zinc-100 line-clamp-2 leading-snug mb-1.5 group-hover:text-white transition-colors">
+      <h3 className="text-sm font-semibold text-ink line-clamp-2 leading-snug mb-1.5 group-hover:text-accent transition-colors">
         {video.title}
       </h3>
       <p className="text-xs text-zinc-500 flex items-center gap-1.5">
@@ -136,13 +137,13 @@ function VideoCard({ video, index, onClick }) {
 // ── Setup instructions (shown when env vars missing) ─────────────────────────
 function SetupGuide({ error }) {
   return (
-    <div className="max-w-xl mx-auto mt-16 p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50">
+    <div className="max-w-xl mx-auto mt-16 p-8 rounded-2xl border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900/50">
       <div className="flex items-center gap-3 mb-5">
         <FiYoutube size={28} className="text-red-500" />
-        <h2 className="text-lg font-bold text-white">YouTube Setup Required</h2>
+        <h2 className="text-lg font-bold text-ink">YouTube Setup Required</h2>
       </div>
 
-      <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
+      <p className="text-ink/70 text-sm mb-6 leading-relaxed">
         {error === 'missing_key'
           ? 'Add your YouTube Data API key to connect your channel.'
           : 'Add your YouTube Channel ID to display your videos.'}
@@ -177,7 +178,7 @@ function SetupGuide({ error }) {
               {item.step}
             </span>
             <div>
-              <div className="text-sm font-semibold text-zinc-200 mb-0.5">{item.title}</div>
+              <div className="text-sm font-semibold text-ink mb-0.5">{item.title}</div>
               <div className="text-xs text-zinc-500 leading-relaxed">{item.desc}</div>
               {item.code && (
                 <pre className="mt-2 p-3 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-green-400 font-mono whitespace-pre">
@@ -196,10 +197,10 @@ function SetupGuide({ error }) {
 function SkeletonCard() {
   return (
     <div className="animate-pulse">
-      <div className="rounded-xl bg-zinc-800/60 aspect-video mb-3" />
-      <div className="h-3.5 bg-zinc-800/60 rounded w-4/5 mb-2" />
-      <div className="h-3.5 bg-zinc-800/60 rounded w-2/3 mb-3" />
-      <div className="h-3 bg-zinc-800/40 rounded w-1/4" />
+      <div className="rounded-xl bg-zinc-200 dark:bg-zinc-800/60 aspect-video mb-3" />
+      <div className="h-3.5 bg-zinc-200 dark:bg-zinc-800/60 rounded w-4/5 mb-2" />
+      <div className="h-3.5 bg-zinc-200 dark:bg-zinc-800/60 rounded w-2/3 mb-3" />
+      <div className="h-3 bg-zinc-200/70 dark:bg-zinc-800/40 rounded w-1/4" />
     </div>
   )
 }
@@ -229,10 +230,11 @@ export default function VideosPage() {
             <FiYoutube size={22} className="text-red-500" />
             <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest">YouTube</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-zinc-100 tracking-tight mb-3">
-            Videos
-          </h1>
-          <p className="text-zinc-400 text-base leading-relaxed max-w-xl">
+          <h1 className="text-3xl sm:text-4xl font-black text-ink tracking-tight mb-3 relative inline-block">
+          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+          <Bouncy text="Videos" />
+        </h1>
+          <p className="text-ink/70 text-base leading-relaxed max-w-xl">
             ML engineering, AI systems, open source projects, and everything in between.
             Click any video to watch it here, or open on YouTube.
           </p>
@@ -268,7 +270,7 @@ export default function VideosPage() {
                 href={`https://www.youtube.com/channel/${import.meta.env.VITE_YOUTUBE_CHANNEL_ID}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors border border-zinc-700 hover:border-zinc-500 px-5 py-2.5 rounded-lg"
+                className="inline-flex items-center gap-2 text-sm text-ink/70 hover:text-ink transition-colors border border-zinc-300 dark:border-zinc-700 hover:border-ink px-5 py-2.5 rounded-lg"
               >
                 <FiYoutube size={15} className="text-red-500" />
                 View full channel on YouTube
