@@ -108,6 +108,13 @@ function buildPath(root) {
       lift()
     })
     art = false
+    // Carry on from the tip of the right shoulder, so the line flows out of
+    // the drawing instead of starting fresh somewhere else.
+    let tip = parts.length ? parts[0][0] : [fig.r, fig.b]
+    parts.forEach((stroke) => stroke.forEach((p) => {
+      if (p[1] > fig.y + fig.h * 0.6 && p[0] > tip[0]) tip = p
+    }))
+    cur = [tip]
   }
 
   // 1–2. Desktop: the doodle sits left of the name, so draw it first, then
@@ -117,7 +124,8 @@ function buildPath(root) {
     sketch()
     // Leave the drawing through the gap between the columns, not across it.
     const gap = (fig.r + lead.x) / 2
-    go([gap - 6, fig.b - 30], [gap, lead.b + 40])
+    const from = cur[0]
+    go([Math.max(from[0] + 20, gap - 10), from[1] + 24], [gap, from[1] - 40], [gap - 4, lead.b + 40])
     underline()
     intro = { stroke: strokes.length, point: cur.length - 1 }
     go([lead.r + 60, lead.y + lead.h * 0.2], [R, lead.y + lead.h * 0.5])
