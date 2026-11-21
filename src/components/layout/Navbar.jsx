@@ -66,18 +66,15 @@ export default function Navbar() {
     }
   }
 
+  // Just the main pages. Home sections (experience, contact) are a scroll away,
+  // and Agent Skills is listed on the Projects page and in the footer.
   const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Projects', href: '/#projects' },
-    { label: 'Experience', href: '/#experience' },
-    { label: 'Photos', href: '/#photos' },
+    { label: 'Projects', href: '/projects' },
     { label: 'Articles', href: '/blog' },
     { label: 'Videos', href: '/videos' },
     { label: 'Code Drops', href: '/code-drops' },
-    { label: 'Agent Skills', href: '/agent-skills' },
-    { label: 'Book a Call', href: '/#book-a-call' },
-    { label: 'Say hi', href: '/#contact' },
   ]
+  const callHref = '/#book-a-call'
 
   return (
     <header
@@ -95,30 +92,25 @@ export default function Navbar() {
           onClick={(e) => handleNavClick('/', e)}
           className="flex items-center gap-3 group"
         >
-          <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <span className="font-display font-extrabold text-base text-zinc-900 dark:text-zinc-100 tracking-tight">
             Sai Sridhar Tarra
           </span>
         </Link>
 
         {/* Desktop Nav Items */}
-        <nav className="hidden md:flex items-center gap-1 font-mono text-xs">
+        <nav className="hidden md:flex items-center gap-1 font-sans text-sm font-medium">
           {navItems.map((item) => {
-            const isBlog = item.href === '/blog' && location.pathname.startsWith('/blog')
-            const isCode = item.href === '/code-drops' && location.pathname.startsWith('/code-drops')
-            const isVideos = item.href === '/videos' && location.pathname.startsWith('/videos')
-            const isSkills = item.href === '/agent-skills' && location.pathname.startsWith('/agent-skills')
-            const isHome = item.href === '/' && location.pathname === '/'
-            const isActive = isBlog || isCode || isVideos || isSkills || isHome
+            const isActive = location.pathname.startsWith(item.href)
 
             return (
               <Link
                 key={item.label}
                 to={item.href}
                 onClick={(e) => handleNavClick(item.href, e)}
-                className={`px-3 py-1.5 rounded-lg transition-all ${
+                className={`relative px-3 py-1.5 transition-colors after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-accent after:transition-transform after:duration-300 ${
                   isActive
-                    ? 'bg-zinc-900 text-white dark:bg-white dark:text-black font-semibold shadow-sm'
-                    : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/60'
+                    ? 'text-ink after:scale-x-100'
+                    : 'text-ink/70 hover:text-ink after:scale-x-0 hover:after:scale-x-100'
                 }`}
               >
                 {item.label}
@@ -129,6 +121,13 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          <Link
+            to={callHref}
+            onClick={(e) => handleNavClick(callHref, e)}
+            className="hidden sm:inline-flex items-center rounded-full border border-ink px-4 py-1.5 text-sm font-semibold text-ink transition-colors hover:border-highlight hover:bg-highlight hover:text-on-highlight"
+          >
+            Book a call
+          </Link>
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
@@ -154,9 +153,9 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-black/95 px-4 py-4 space-y-2 font-mono text-sm"
+            className="md:hidden border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-black/95 px-4 py-4 space-y-2 font-sans text-base font-medium"
           >
-            {navItems.map((item) => (
+            {[...navItems, { label: 'Book a call', href: callHref }].map((item) => (
               <Link
                 key={item.label}
                 to={item.href}

@@ -183,20 +183,24 @@ export default function Home() {
         )}
 
         {/* Camera roll */}
-        {photos.length > 0 && (
-          <section id="photos" aria-labelledby="photos-title" className="scroll-mt-24">
-            <div className="mb-10 text-center">
-              <SectionTitle id="photos-title" className="mb-2">From my camera roll</SectionTitle>
-              <p className="text-ink/80">
-                <span className="hidden sm:inline">Drag them around, or click one for a closer look.</span>
-                <span className="sm:hidden">Tap one for a closer look, then swipe.</span>
-              </p>
-            </div>
-            <div data-line="pile">
-              <PhotoPile photos={photos} />
-            </div>
-          </section>
-        )}
+        <section id="photos" aria-labelledby="photos-title" className="scroll-mt-24">
+          <Reveal slide={false} className="mb-10 text-center">
+            <SectionTitle id="photos-title" className="mb-2"><Bouncy text="From my camera roll" inView /></SectionTitle>
+            <p className="text-ink/80">
+              {photos.length > 0 ? (
+                <>
+                  <span className="hidden sm:inline">Drag them around, or click one for a closer look.</span>
+                  <span className="sm:hidden">Tap one for a closer look, then swipe.</span>
+                </>
+              ) : (
+                'Photos from Edinburgh and beyond, coming soon.'
+              )}
+            </p>
+          </Reveal>
+          <div data-line="pile">
+            {photos.length > 0 ? <PhotoPile photos={photos} /> : <EmptyPrints />}
+          </div>
+        </section>
 
         {/* Book a call */}
         <div data-line="call">
@@ -228,5 +232,38 @@ export default function Home() {
       </div>
       </div>
     </>
+  )
+}
+
+// Until there are photos: a few blank, tilted prints waiting to be filled.
+function EmptyPrints() {
+  const prints = [
+    { r: -7, x: '-8%', caption: 'Arthur\'s Seat' },
+    { r: 4, x: '0%', caption: 'Old Town' },
+    { r: -2, x: '8%', caption: 'Leith' },
+  ]
+  return (
+    <div className="flex justify-center py-4">
+      {prints.map((p, i) => (
+        <motion.div
+          key={p.caption}
+          initial={{ opacity: 0, y: 24, rotate: 0 }}
+          whileInView={{ opacity: 1, y: 0, rotate: p.r }}
+          whileHover={{ y: -10, rotate: 0, scale: 1.04 }}
+          viewport={{ once: true }}
+          transition={{ type: 'spring', stiffness: 220, damping: 18, delay: i * 0.12 }}
+          className="-mx-3 w-36 rounded-lg border-2 border-ink bg-zinc-50 p-2.5 pb-3 shadow-[0_10px_24px_-14px_rgb(0_0_0/0.45)] sm:-mx-4 sm:w-48 dark:bg-zinc-900"
+          style={{ zIndex: i === 1 ? 2 : 1 }}
+        >
+          <div className="flex aspect-[4/5] items-center justify-center rounded border-2 border-dashed border-ink/30 bg-zinc-100 dark:bg-zinc-800">
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-8 w-8 text-ink/40" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 8h3l2-2.5h6L17 8h3v11H4z" />
+              <circle cx="12" cy="13" r="3.5" />
+            </svg>
+          </div>
+          <p className="mt-2 text-center text-xs font-medium text-ink/70">{p.caption}</p>
+        </motion.div>
+      ))}
+    </div>
   )
 }
