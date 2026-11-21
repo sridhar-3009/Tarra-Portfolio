@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion, useMotionValue, useSpring } from 'framer-motion'
 
 // Shared building blocks for the home page.
 
@@ -40,26 +40,99 @@ export function SectionTitle({ id, children, className = '' }) {
   )
 }
 
+// Text whose letters drop in one by one, then wobble when you hover them.
+// Only the letters move, so a data-line anchor around it keeps its box.
+export function Bouncy({ text, delay = 0, inView = false }) {
+  const reduce = useReducedMotion()
+  const words = text.split(' ')
+  let n = 0
+  return (
+    <span aria-label={text}>
+      {words.map((word, w) => (
+        <span key={w} aria-hidden="true" className="inline-block whitespace-nowrap">
+          {Array.from(word).map((ch) => {
+            const i = n++
+            const enter = { y: 0, opacity: 1, rotate: 0 }
+            return (
+              <motion.span
+                key={i}
+                className="letter inline-block"
+                initial={reduce ? false : { y: '0.55em', opacity: 0, rotate: i % 2 ? 8 : -8 }}
+                {...(inView ? { whileInView: enter, viewport: { once: true } } : { animate: enter })}
+                transition={{ type: 'spring', stiffness: 420, damping: 18, delay: delay + i * 0.035 }}
+              >
+                {ch}
+              </motion.span>
+            )
+          })}
+          {w < words.length - 1 && '\u00a0'}
+        </span>
+      ))}
+    </span>
+  )
+}
+
+// A little hand-drawn sparkle that twinkles.
+export function Sparkle({ className = '', size = 18, delay = 0 }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      className={`twinkle pointer-events-none absolute ${className}`}
+      style={{ animationDelay: `${delay}s` }}
+    >
+      <path d="M12 1.5c.9 5.4 3.3 8.1 10.5 10.5-7.2 2.4-9.6 5.1-10.5 10.5C11.1 17.1 8.7 14.4 1.5 12 8.7 9.6 11.1 6.9 12 1.5Z" fill="currentColor" />
+    </svg>
+  )
+}
+
 // Pills fill with sunshine yellow from the bottom on hover.
 const pill =
-  'relative isolate inline-flex items-center justify-center gap-1.5 overflow-hidden rounded-full border border-ink bg-paper px-6 pb-2 pt-[calc(0.5rem+1px)] font-display text-base font-semibold uppercase tracking-wide text-ink no-underline transition-[color,border-color,transform] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:translate-y-full before:rounded-full before:bg-highlight before:transition-transform before:duration-300 before:ease-out hover:-translate-y-0.5 hover:border-highlight hover:text-on-highlight hover:before:translate-y-0 focus-visible:border-highlight focus-visible:text-on-highlight focus-visible:before:translate-y-0 active:translate-y-0'
+  'relative isolate inline-flex items-center justify-center gap-1.5 overflow-hidden rounded-full border border-ink bg-paper px-6 pb-2 pt-[calc(0.5rem+1px)] font-display text-base font-semibold uppercase tracking-wide text-ink no-underline transition-[color,border-color] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:translate-y-full before:rounded-full before:bg-highlight before:transition-transform before:duration-300 before:ease-out hover:border-highlight hover:text-on-highlight hover:before:translate-y-0 focus-visible:border-highlight focus-visible:text-on-highlight focus-visible:before:translate-y-0'
 
 // Router paths ("/projects") use <Link>; http(s) links open in a new tab;
 // anything else (hash links, mailto:, tel:, downloads) is a plain anchor.
+// Pills lean a little toward the cursor.
+const MotionLink = motion(Link)
+
 export function Pill({ href, children, download }) {
+  const reduce = useReducedMotion()
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const x = useSpring(mx, { stiffness: 300, damping: 18 })
+  const y = useSpring(my, { stiffness: 300, damping: 18 })
+  const magnet = reduce
+    ? {}
+    : {
+        style: { x, y },
+        onPointerMove: (e) => {
+          if (e.pointerType !== 'mouse') return
+          const r = e.currentTarget.getBoundingClientRect()
+          mx.set((e.clientX - (r.left + r.width / 2)) * 0.18)
+          my.set((e.clientY - (r.top + r.height / 2)) * 0.25)
+        },
+        onPointerLeave: () => {
+          mx.set(0)
+          my.set(0)
+        },
+      }
+
   if (href.startsWith('/') && !href.includes('#') && !download) {
-    return <Link to={href} className={pill}>{children}</Link>
+    return <MotionLink to={href} className={pill} {...magnet}>{children}</MotionLink>
   }
   const external = /^https?:/.test(href)
   return (
-    <a
+    <motion.a
       href={href}
       className={pill}
       download={download}
+      {...magnet}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       {children}
-    </a>
+    </motion.a>
   )
 }
 

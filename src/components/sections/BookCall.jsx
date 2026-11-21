@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
 import { personal } from '../../data/personal'
 import { SectionTitle, Pill, Reveal } from '../home/ui'
 
@@ -13,13 +14,40 @@ const topics = [
   'Student life in Edinburgh',
 ]
 
+// The card tilts gently toward the cursor.
+function TiltCard({ children, className }) {
+  const reduce = useReducedMotion()
+  const rx = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 })
+  const ry = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 })
+  if (reduce) return <div className={className}>{children}</div>
+  return (
+    <motion.div
+      className={className}
+      style={{ rotateX: rx, rotateY: ry, transformPerspective: 900 }}
+      onPointerMove={(e) => {
+        if (e.pointerType !== 'mouse') return
+        const r = e.currentTarget.getBoundingClientRect()
+        ry.set(((e.clientX - r.left) / r.width - 0.5) * 5)
+        rx.set(-((e.clientY - r.top) / r.height - 0.5) * 5)
+      }}
+      onPointerLeave={() => {
+        rx.set(0)
+        ry.set(0)
+      }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
 export default function BookCall() {
   const href = personal.bookingUrl
     || `mailto:${personal.email}?subject=${encodeURIComponent('Call request: Edinburgh / UK jobs')}`
 
   return (
     <section id="book-a-call" aria-labelledby="call-title" className="scroll-mt-24">
-      <Reveal className="rounded-2xl border-2 border-ink bg-zinc-100 p-6 shadow-[6px_6px_0_rgb(var(--c-accent))] sm:p-10 dark:bg-zinc-900">
+      <Reveal>
+      <TiltCard className="rounded-2xl border-2 border-ink bg-zinc-100 p-6 shadow-[6px_6px_0_rgb(var(--c-accent))] sm:p-10 dark:bg-zinc-900">
         <SectionTitle id="call-title" className="mb-4">Studying at Edinburgh or job hunting in the UK?</SectionTitle>
         <p className="mb-6 max-w-2xl text-lg leading-relaxed text-ink">
           I&apos;m doing my MSc in Statistics with Data Science at Edinburgh. Book a 30-minute call about applying,
@@ -41,6 +69,7 @@ export default function BookCall() {
             My own experience, not official university or immigration advice.
           </span>
         </div>
+      </TiltCard>
       </Reveal>
     </section>
   )

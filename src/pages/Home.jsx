@@ -10,7 +10,7 @@ import { photos } from '../data/photos'
 import { blogPosts } from '../blog'
 import { formatDate } from '../utils/blogUtils'
 import { motion, useReducedMotion } from 'framer-motion'
-import { SectionTitle, Pill, Rows, Row, TextLink, Reveal } from '../components/home/ui'
+import { SectionTitle, Pill, Rows, Row, TextLink, Reveal, Bouncy, Sparkle } from '../components/home/ui'
 import PhotoPile from '../components/home/PhotoPile'
 import ScrollLine from '../components/home/ScrollLine'
 import Eyes from '../components/home/Eyes'
@@ -74,7 +74,10 @@ export default function Home() {
             aria-label="A line drawing of Sai"
             className="order-2 mx-auto aspect-[400/540] w-full max-w-[17rem] md:order-1 md:max-w-none"
           />
-          <div className="order-1 md:order-2">
+          <div className="relative order-1 md:order-2">
+            <Sparkle className="-left-6 top-2 text-highlight" size={22} />
+            <Sparkle className="left-36 top-0 text-accent" size={14} delay={0.9} />
+            <Sparkle className="right-6 top-24 text-highlight hidden sm:block" size={18} delay={1.6} />
             <motion.div {...intro(0)}>
               <Eyes className="mb-4 w-24 sm:w-28" />
             </motion.div>
@@ -83,7 +86,7 @@ export default function Home() {
               {...(reduce ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.8, delay: 0.2 } })}
               className="font-display font-extrabold text-ink text-[clamp(2.75rem,1.6rem+3.6vw,4.5rem)] leading-[1.02] tracking-[-0.01em] mb-8"
             >
-              <span data-line="lead" className="inline-block">Hi, I&apos;m Sai.</span>
+              <span data-line="lead" className="inline-block"><Bouncy text="Hi, I'm Sai." delay={0.25} /></span>
             </motion.h1>
             <div className="space-y-4 text-lg leading-relaxed text-ink">
               <motion.p {...intro(1)}>I live in Edinburgh. I build backend systems and I&apos;m into machine learning.</motion.p>
@@ -110,7 +113,7 @@ export default function Home() {
         {/* MailAir */}
         <section aria-labelledby="mailair-title" className="max-w-3xl">
           <Reveal slide={false}>
-            <SectionTitle id="mailair-title" className="mb-5">I&apos;m building <span data-line="mailair" className="inline-block">MailAir</span></SectionTitle>
+            <SectionTitle id="mailair-title" className="mb-5">I&apos;m building <span data-line="mailair" className="inline-block"><Bouncy text="MailAir" inView delay={0.15} /></span></SectionTitle>
           </Reveal>
           <Reveal delay={0.1} className="space-y-4 text-lg leading-relaxed text-ink">
             <p>
@@ -130,7 +133,7 @@ export default function Home() {
         {/* Things I made */}
         <section id="projects" aria-labelledby="things-title" className="scroll-mt-24">
           <Reveal slide={false}>
-            <SectionTitle id="things-title" className="mb-8 text-center"><span data-line="things">Some things I made</span></SectionTitle>
+            <SectionTitle id="things-title" className="mb-8 text-center"><span data-line="things"><Bouncy text="Some things I made" inView /></span></SectionTitle>
           </Reveal>
           <Rows>
             {things.map((t, i) => (
@@ -147,7 +150,7 @@ export default function Home() {
         {/* Experience */}
         <section id="experience" aria-labelledby="experience-title" className="scroll-mt-24">
           <Reveal slide={false}>
-            <SectionTitle id="experience-title" className="mb-8"><span data-line="experience">Where I&apos;ve been</span></SectionTitle>
+            <SectionTitle id="experience-title" className="mb-8"><span data-line="experience"><Bouncy text="Where I've been" inView /></span></SectionTitle>
           </Reveal>
           <Rows>
             {experiences.map((e, i) => (
@@ -166,7 +169,7 @@ export default function Home() {
         {blogPosts.length > 0 && (
           <section aria-labelledby="writing-title">
             <Reveal slide={false}>
-              <SectionTitle id="writing-title" className="mb-8"><span data-line="writing">Things I wrote</span></SectionTitle>
+              <SectionTitle id="writing-title" className="mb-8"><span data-line="writing"><Bouncy text="Things I wrote" inView /></span></SectionTitle>
             </Reveal>
             <Rows>
               {blogPosts.slice(0, 5).map((post, i) => (
@@ -203,7 +206,9 @@ export default function Home() {
         {/* Say hi */}
         <section id="contact" aria-labelledby="hi-title" className="scroll-mt-24 text-center">
           <Reveal>
-            <SectionTitle id="hi-title" className="mb-3">Say hi</SectionTitle>
+            <SectionTitle id="hi-title" className="mb-3">
+              <Bouncy text="Say hi" inView /> <span className="wave-hand" role="img" aria-label="waving hand">👋</span>
+            </SectionTitle>
             <p className="mx-auto mb-8 max-w-xl text-lg text-ink">
               Email is the best way to reach me. I&apos;m open to software engineering and ML roles in the UK.
             </p>
