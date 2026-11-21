@@ -15,7 +15,7 @@ export default function PhotoPile({ photos }) {
   const [width, setWidth] = useState(0)
   const [ratios, setRatios] = useState({})
   const [offsets, setOffsets] = useState({})
-  const [order, setOrder] = useState(() => photos.map((_, i) => i))
+  const [order, setOrder] = useState(() => photos.map((_, i) => photos.length - 1 - i))
   const [dragging, setDragging] = useState(null)
   const [open, setOpen] = useState(null)
   const drag = useRef(null)
@@ -28,19 +28,30 @@ export default function PhotoPile({ photos }) {
     return () => ro.disconnect()
   }, [])
 
+  // Scatter the prints over a loose grid so they spread across the width:
+  // each sits in its own cell, nudged and tilted a little, overlapping its
+  // neighbours like photos tossed on a table.
   const isMobile = width < 640
-  const printW = isMobile ? Math.min(150, width * 0.42) : Math.min(230, width * 0.24)
-  const pileH = isMobile ? 380 : 460
+  const cols = isMobile ? 2 : 4
+  const cellW = width / cols
+  const printW = Math.min(isMobile ? 170 : 250, cellW * 1.15)
+  const rowH = printW * 0.95
+  const rows = Math.ceil(photos.length / cols)
 
   const layout = photos.map((_, i) => {
     const ar = ratios[i] || 0.8
     const h = printW / ar
-    const x = seeded(i, 1) * Math.max(0, width - printW)
-    const y = seeded(i, 2) * Math.max(0, pileH - h)
-    const r = (seeded(i, 3) - 0.5) * 16
+    const row = Math.floor(i / cols)
+    // stagger odd rows so the pile doesn't look like a grid
+    const col = (i % cols) + (row % 2 ? 0.5 : 0)
+    const cx = Math.min(width - printW / 2, Math.max(printW / 2, (col + 0.5) * cellW))
+    const x = Math.min(width - printW, Math.max(0, cx - printW / 2 + (seeded(i, 1) - 0.5) * cellW * 0.25))
+    const y = row * rowH + (seeded(i, 2) - 0.5) * 30 + (rowH - Math.min(h, rowH * 1.2)) / 2
+    const r = (seeded(i, 3) - 0.5) * 14
     const off = offsets[i] || { x: 0, y: 0 }
-    return { x: x + off.x, y: y + off.y, r, ar }
+    return { x: x + off.x, y: y + off.y, r, ar, h }
   })
+  const pileH = Math.max(...layout.map((p) => p.y - (offsets[layout.indexOf(p)]?.y || 0) + p.h), rows * rowH) + 20
 
   const bringToFront = (i) => setOrder((o) => [...o.filter((j) => j !== i), i])
 
