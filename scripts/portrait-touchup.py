@@ -42,22 +42,13 @@ def curve(img, pts, width=3):
     cv2.polylines(img, [p.astype(np.int32)], False, 0, width, cv2.LINE_AA)
 
 
-# Moustache: everything between the nose and the upper lip, plus the ends
-# that hang down past the corners of the mouth.
-wipe(im, [(482, 700), (735, 700), (735, 741), (482, 741)])
-wipe(im, [(482, 741), (538, 741), (538, 752), (528, 790), (482, 790)])
-wipe(im, [(680, 741), (735, 741), (735, 790), (690, 790), (682, 752)])
-# Stray moustache strands still touching the lips: drop the short ink pieces
-# in a band around the lips, keeping the long lip lines themselves.
-y0, y1, x0, x1 = 736, 760, 520, 700
-band = (im[y0:y1, x0:x1] < 128).astype(np.uint8)
-n, lab, stats, _ = cv2.connectedComponentsWithStats(band, connectivity=8)
-for k in range(1, n):
-    if stats[k, cv2.CC_STAT_WIDTH] < 40:
-        im[y0:y1, x0:x1][lab == k] = 255
-# Soft mouth corners where the moustache covered them.
-curve(im, [(528, 755), (534, 757), (540, 758)], 2)
-curve(im, [(678, 760), (684, 759), (690, 757)], 2)
+# Moustache and mouth: clear everything between the nose and the chin, then
+# redraw the lips cleanly with a gentle smile (the originals sat inside the
+# moustache and came out broken once it was removed).
+wipe(im, [(482, 701), (735, 701), (740, 792), (478, 792)])
+curve(im, [(524, 752), (532, 757), (560, 759), (594, 757), (610, 759), (626, 757), (660, 759), (688, 757), (696, 752)], 4)
+curve(im, [(546, 752), (570, 743), (596, 741), (610, 747), (624, 741), (650, 743), (674, 752)], 3)
+curve(im, [(562, 768), (586, 778), (610, 781), (634, 778), (658, 768)], 3)
 
 # Stubble under the lower lip: replace with a soft chin crease.
 wipe(im, [(560, 786), (665, 786), (665, 820), (560, 820)])

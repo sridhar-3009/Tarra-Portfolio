@@ -40,9 +40,9 @@ export function SectionTitle({ id, children, className = '' }) {
   )
 }
 
-// Pills fill with coral from the bottom on hover.
+// Pills fill with sky blue from the bottom on hover.
 const pill =
-  'relative isolate inline-flex items-center justify-center gap-1.5 overflow-hidden rounded-full border border-ink bg-paper px-6 pb-2 pt-[calc(0.5rem+1px)] font-display text-base font-semibold uppercase tracking-wide text-ink no-underline transition-[color,border-color,transform] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:translate-y-full before:rounded-full before:bg-accent before:transition-transform before:duration-300 before:ease-out hover:-translate-y-0.5 hover:border-accent hover:text-on-accent hover:before:translate-y-0 focus-visible:border-accent focus-visible:text-on-accent focus-visible:before:translate-y-0 active:translate-y-0'
+  'relative isolate inline-flex items-center justify-center gap-1.5 overflow-hidden rounded-full border border-ink bg-paper px-6 pb-2 pt-[calc(0.5rem+1px)] font-display text-base font-semibold uppercase tracking-wide text-ink no-underline transition-[color,border-color,transform] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:translate-y-full before:rounded-full before:bg-highlight before:transition-transform before:duration-300 before:ease-out hover:-translate-y-0.5 hover:border-highlight hover:text-on-highlight hover:before:translate-y-0 focus-visible:border-highlight focus-visible:text-on-highlight focus-visible:before:translate-y-0 active:translate-y-0'
 
 // Router paths ("/projects") use <Link>; http(s) links open in a new tab;
 // anything else (hash links, mailto:, tel:, downloads) is a plain anchor.
@@ -109,7 +109,7 @@ export function Row({ href, name, description, meta, arrow, lineId, i = 0 }) {
 
   if (!href) return <li><RowFade i={i}>{content}</RowFade></li>
   return (
-    <li className="relative isolate before:absolute before:inset-0 before:-z-10 before:origin-left before:scale-x-0 before:bg-accent/15 before:transition-transform before:duration-500 before:ease-out hover:before:scale-x-100">
+    <li className="relative isolate before:absolute before:inset-0 before:-z-10 before:origin-left before:scale-x-0 before:bg-highlight/30 before:transition-transform before:duration-500 before:ease-out hover:before:scale-x-100">
       {internal ? (
         <Link to={href} className="block px-1"><RowFade i={i}>{content}</RowFade></Link>
       ) : (

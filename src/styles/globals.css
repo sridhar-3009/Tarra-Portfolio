@@ -1,47 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap');
 
-/* ─── Stone, Forest & Coral Palette ──────────────────────────────────────
+/* ─── Sky & Peach Palette ────────────────────────────────────────────────
    Tailwind's zinc / white / black resolve to these RGB triplets, so every
    existing utility class picks up the palette in both modes.
-   Light: deep forest ink on warm stone paper. Dark: cream ink on near-black
-   green. Coral is the accent for hovers, highlights and the pencil. */
+   Light: soft navy ink on sky-white paper. Dark: ice ink on night blue.
+   Peach (accent) draws the line and small details; sky blue (highlight)
+   fills things on hover. */
 :root {
-  --c-white: 244 241 234;   /* stone paper */
-  --c-black: 15 20 18;      /* night green */
-  --c-ink: 30 58 52;        /* forest */
-  --c-paper: 244 241 234;
-  --c-accent: 255 107 74;   /* coral */
-  --c-on-accent: 22 32 29;
-  --z-50: 244 241 234;
-  --z-100: 236 232 222;
-  --z-200: 201 204 198;
-  --z-300: 169 177 170;
-  --z-400: 126 140 134;
-  --z-500: 94 113 106;
-  --z-600: 68 91 84;
-  --z-700: 51 76 69;
-  --z-800: 40 67 60;
-  --z-900: 30 58 52;
-  --z-950: 20 42 37;
+  --c-white: 244 248 255;     /* sky-white paper */
+  --c-black: 22 33 58;        /* night blue */
+  --c-ink: 31 45 77;          /* soft navy */
+  --c-paper: 244 248 255;
+  --c-accent: 255 126 138;    /* peach */
+  --c-highlight: 167 216 255; /* sky blue */
+  --c-on-highlight: 31 45 77;
+  --z-50: 244 248 255;
+  --z-100: 235 240 248;
+  --z-200: 201 207 219;
+  --z-300: 170 177 193;
+  --z-400: 127 136 157;
+  --z-500: 95 106 131;
+  --z-600: 69 82 110;
+  --z-700: 52 65 95;
+  --z-800: 42 55 86;
+  --z-900: 31 45 77;
+  --z-950: 22 33 58;
   color-scheme: light;
 }
 
 html.dark {
-  --c-ink: 233 228 216;
-  --c-paper: 15 20 18;
-  --c-accent: 255 138 107;
-  --c-on-accent: 15 20 18;
-  --z-50: 244 241 234;
-  --z-100: 233 228 216;
-  --z-200: 220 218 208;
-  --z-300: 200 202 192;
-  --z-400: 170 175 166;
-  --z-500: 130 138 131;
-  --z-600: 95 105 99;
-  --z-700: 60 70 65;
-  --z-800: 38 46 42;
-  --z-900: 24 30 27;
-  --z-950: 15 20 18;
+  --c-ink: 238 243 255;
+  --c-paper: 22 33 58;
+  --c-accent: 255 150 160;
+  --c-highlight: 167 216 255;
+  --c-on-highlight: 22 33 58;
+  --z-50: 244 248 255;
+  --z-100: 238 243 255;
+  --z-200: 220 226 240;
+  --z-300: 200 208 225;
+  --z-400: 175 185 206;
+  --z-500: 140 152 176;
+  --z-600: 105 118 145;
+  --z-700: 68 82 110;
+  --z-800: 45 59 88;
+  --z-900: 30 43 70;
+  --z-950: 22 33 58;
   color-scheme: dark;
 }
 
@@ -52,8 +55,8 @@ body {
 }
 
 ::selection {
-  background: rgb(var(--c-accent));
-  color: rgb(var(--c-on-accent));
+  background: rgb(var(--c-highlight));
+  color: rgb(var(--c-on-highlight));
 }
 
 html .prose {
