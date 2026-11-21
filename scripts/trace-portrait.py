@@ -19,8 +19,8 @@ For clean black-on-white line art (what the site uses now), set LINEART=1:
 it follows the centre of each drawn line instead of finding photo edges.
 The current pencil path: LINEART=1 MINLEN=8 MINSPAN=6 EPS=1.4, whole image.
 The drawing itself ships as src/assets/portrait/lines-light.png and
-lines-dark.png (white ink on black, 800 x 1080), one per theme (the dark
-copy has smaller pupils); the pencil's path is traced from the drawing.
+lines-dark.png (white ink on black, 800 x 1080), one per theme; the pencil's
+path is traced from the union of both so it covers either.
 """
 import json
 import sys

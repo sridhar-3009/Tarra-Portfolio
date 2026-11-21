@@ -1,13 +1,12 @@
 """Touch up the line portrait so it reads well inverted in dark mode.
 
-- Optional (SHAVE=1): clean-shaven: remove the moustache and the stubble
-  under the lip, and redraw the lips and a soft chin crease.
+- Clean-shaven: remove the moustache and the stubble under the lip, and
+  redraw the mouth corners and a soft chin crease.
 - Dark mode shows the drawing cream-on-navy, so large solid-black areas turn
   into bright blobs. Shrink the pupils to a small dot with a catchlight.
 
-usage: [SHAVE=1] python3 scripts/portrait-touchup.py drawing.png out.png
+usage: python3 scripts/portrait-touchup.py drawing.png out.png
 """
-import os
 import sys
 
 import cv2
@@ -43,18 +42,16 @@ def curve(img, pts, width=3):
     cv2.polylines(img, [p.astype(np.int32)], False, 0, width, cv2.LINE_AA)
 
 
-if os.environ.get('SHAVE'):
-    # Moustache and mouth: clear everything between the nose and the chin, then
-    # redraw the lips cleanly with a gentle smile (the originals sat inside the
-    # moustache and came out broken once it was removed).
-    wipe(im, [(482, 701), (735, 701), (740, 792), (478, 792)])
-    curve(im, [(524, 752), (532, 757), (560, 759), (594, 757), (610, 759), (626, 757), (660, 759), (688, 757), (696, 752)], 4)
-    curve(im, [(546, 752), (570, 743), (596, 741), (610, 747), (624, 741), (650, 743), (674, 752)], 3)
-    curve(im, [(562, 768), (586, 778), (610, 781), (634, 778), (658, 768)], 3)
+# Moustache and mouth: clear everything between the nose and the chin, then
+# redraw the lips cleanly with a gentle smile (the originals sat inside the
+# moustache and came out broken once it was removed).
+wipe(im, [(482, 701), (735, 701), (740, 792), (478, 792)])
+curve(im, [(524, 752), (532, 757), (560, 759), (594, 757), (610, 759), (626, 757), (660, 759), (688, 757), (696, 752)], 4)
+curve(im, [(546, 752), (570, 743), (596, 741), (610, 747), (624, 741), (650, 743), (674, 752)], 3)
+curve(im, [(562, 768), (586, 778), (610, 781), (634, 778), (658, 768)], 3)
 
-    # Stubble under the lower lip: replace with a soft chin crease.
-    wipe(im, [(560, 786), (665, 786), (665, 820), (560, 820)])
-    curve(im, [(598, 801), (612, 803), (626, 801)], 2)
-
+# Stubble under the lower lip: replace with a soft chin crease.
+wipe(im, [(560, 786), (665, 786), (665, 820), (560, 820)])
+curve(im, [(598, 801), (612, 803), (626, 801)], 2)
 
 cv2.imwrite(out, im)
