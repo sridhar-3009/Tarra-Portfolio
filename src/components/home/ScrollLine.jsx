@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { figureStrokes, FIGURE_W } from './figure'
+import portraitLines from '../../assets/portrait/lines.png'
 
 // One hand-drawn line that runs down the whole home page and draws itself as
 // you scroll: it underlines the name, sketches the doodle in the hero, circles
@@ -54,10 +55,10 @@ function buildPath(root) {
   const strokes = []
   let cur = []
   let intro = null // where the hero drawing ends: { stroke, point }
-  let fine = false // portrait detail strokes use a finer pen
+  let art = false // portrait strokes: the pencil's path that reveals the drawing
   const go = (...pts) => cur.push(...pts.map(([x, y]) => [clampX(x), y]))
   const lift = () => {
-    if (cur.length) strokes.push({ pts: cur, fine })
+    if (cur.length) strokes.push({ pts: cur, art })
     cur = []
   }
 
@@ -93,18 +94,20 @@ function buildPath(root) {
     go([lead.r + 16, y - 6], [lead.r + 30, y + 10])
   }
 
-  // Sketch the doodle. The first stroke continues the line; the rest lift the
-  // pen like a real sketch.
+  // Draw the portrait: the line runs into the drawing, then the pencil follows
+  // the drawing's own strokes, revealing it as it goes.
   const sketch = () => {
     const s = fig.w / FIGURE_W
     const tf = ([x, y]) => [fig.x + x * s, fig.y + y * s]
-    figureStrokes.forEach((stroke, i) => {
-      if (i > 0) lift()
-      fine = i > 0
-      stroke.map(tf).forEach((p) => cur.push(p))
-    })
+    const parts = figureStrokes.map((stroke) => stroke.map(tf))
+    if (parts.length) go(parts[0][0])
     lift()
-    fine = false
+    art = true
+    parts.forEach((stroke) => {
+      cur = stroke
+      lift()
+    })
+    art = false
   }
 
   // 1–2. Desktop: the doodle sits left of the name, so draw it first, then
@@ -194,22 +197,27 @@ function buildPath(root) {
   lift()
 
   return {
-    strokes: strokes.map(({ pts, fine: f }) => ({ d: smooth(pts), pts, fine: f })),
+    strokes: strokes.map(({ pts, art: a }) => ({ d: smooth(pts), pts, art: a })),
     intro,
+    fig,
   }
 }
 
 export default function ScrollLine({ rootRef }) {
   const svgRef = useRef(null)
   const groupRef = useRef(null)
+  const revealRef = useRef(null)
+  const artRef = useRef(null)
   const tipRef = useRef(null)
 
   useEffect(() => {
     const root = rootRef.current
     const svg = svgRef.current
     const group = groupRef.current
+    const reveal = revealRef.current
+    const art = artRef.current
     const tip = tipRef.current
-    if (!root || !svg || !group) return
+    if (!root || !svg || !group || !reveal || !art) return
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
     // One <path> per pen stroke: SVG restarts dash patterns on every subpath,
@@ -219,6 +227,7 @@ export default function ScrollLine({ rootRef }) {
     let samples = [] // [length along the whole line, cumulative max y]
     let drawn = 0
     let introLen = 0 // the portrait and name underline always finish on load
+    let artEnd = 0 // once the pencil is past the portrait, show it whole
     let raf = 0
 
     const pointAt = (l) => {
@@ -242,18 +251,33 @@ export default function ScrollLine({ rootRef }) {
       svg.style.height = `${H}px`
 
       group.replaceChildren()
+      reveal.replaceChildren()
       strokes = []
+      artEnd = 0
       total = 0
       samples = []
       introLen = 0
       let maxY = -Infinity
       const built = buildPath(root)
-      built.strokes.forEach(({ d, pts, fine }, si) => {
+      const img = svg.querySelector('#sl-ink image')
+      if (built.fig) {
+        const { x, y, w, h } = built.fig
+        img.setAttribute('x', x)
+        img.setAttribute('y', y)
+        img.setAttribute('width', w)
+        img.setAttribute('height', h)
+        art.style.display = ''
+      } else {
+        art.style.display = 'none'
+      }
+      // The reveal pen is wide enough to uncover the drawing's thickest ink.
+      reveal.setAttribute('stroke-width', built.fig ? Math.max(8, (built.fig.w / FIGURE_W) * 13) : 10)
+
+      built.strokes.forEach(({ d, pts, art: isArt }, si) => {
         if (!d) return
         const el = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         el.setAttribute('d', d)
-        if (fine) el.setAttribute('stroke-width', '2.2')
-        group.appendChild(el)
+        ;(isArt ? reveal : group).appendChild(el)
         const len = el.getTotalLength()
         el.style.strokeDasharray = `${len} ${len}`
         strokes.push({ el, start: total, len })
@@ -271,6 +295,7 @@ export default function ScrollLine({ rootRef }) {
           introLen = total + (seg[Math.min(built.intro.point, seg.length - 1)] / poly) * len
         }
         total += len
+        if (isArt) artEnd = total
       })
       drawn = Math.min(drawn, total)
       paint()
@@ -302,6 +327,14 @@ export default function ScrollLine({ rootRef }) {
       for (const s of strokes) {
         const shown = Math.min(s.len, Math.max(0, drawn - s.start))
         s.el.style.strokeDashoffset = `${s.len - shown}`
+      }
+      // The reveal pen only follows the drawing's centre lines; once it is
+      // done, show the whole drawing so no ink is left hidden.
+      const whole = drawn >= artEnd - 0.5
+      if (whole !== (art.dataset.whole === '1')) {
+        art.dataset.whole = whole ? '1' : '0'
+        if (whole) art.removeAttribute('mask')
+        else art.setAttribute('mask', 'url(#sl-reveal)')
       }
       if (!tip) return
       if (!strokes.length || drawn <= 0.5 || drawn >= total - 0.5 || reduce.matches) {
@@ -360,6 +393,19 @@ export default function ScrollLine({ rootRef }) {
   return (
     <>
       <svg ref={svgRef} aria-hidden="true" focusable="false" className="pointer-events-none absolute left-0 top-0 z-0 overflow-visible">
+        <defs>
+          {/* Where the pencil has been over the portrait */}
+          <mask id="sl-reveal" maskUnits="userSpaceOnUse" x="-5000" y="-5000" width="20000" height="40000">
+            <g ref={revealRef} fill="none" stroke="white" strokeLinecap="round" strokeLinejoin="round" />
+          </mask>
+          {/* The drawing itself: white ink on black */}
+          <mask id="sl-ink" maskUnits="userSpaceOnUse" x="-5000" y="-5000" width="20000" height="40000">
+            <image href={portraitLines} preserveAspectRatio="none" />
+          </mask>
+        </defs>
+        <g ref={artRef} mask="url(#sl-reveal)">
+          <rect x="-5000" y="-5000" width="20000" height="40000" className="fill-ink" mask="url(#sl-ink)" />
+        </g>
         <g
           ref={groupRef}
           fill="none"

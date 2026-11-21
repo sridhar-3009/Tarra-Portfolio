@@ -15,8 +15,11 @@ usage:
   MERGE    dilation size that merges double edges into one line
   MINSPAN  drops specks smaller than this many output pixels
 
-The current drawing used: crop 791 0 1699 1226, Canny 15 45, the seeds file,
-and SMOOTH=1 MERGE=5 MINLEN=16 EPS=2.2 MINSPAN=10.
+For clean black-on-white line art (what the site uses now), set LINEART=1:
+it follows the centre of each drawn line instead of finding photo edges.
+The current pencil path: LINEART=1 MINLEN=8 MINSPAN=6 EPS=1.4, whole image.
+The drawing itself ships as src/assets/portrait/lines.png (white ink on
+black, 800 x 1080), which the pencil's path reveals.
 """
 import json
 import sys
@@ -118,6 +121,14 @@ def main():
     W, H = OUT_W * WORK, OUT_H * WORK
     img = cv2.resize(img, (W, H), interpolation=cv2.INTER_AREA)
 
+    if os.environ.get('LINEART'):
+        # Clean black-on-white line art: follow the centre of each drawn line.
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        ink = (gray < int(os.environ.get('INK', 140))).astype(np.uint8)
+        ink = cv2.morphologyEx(ink, cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8))
+        emit(thin(ink), out_json, out_png)
+        return
+
     # 1. Separate the person from the background with GrabCut.
     bgd, fgd = np.zeros((1, 65)), np.zeros((1, 65))
     seeds = json.load(open(SEEDS)) if SEEDS else None
@@ -165,6 +176,10 @@ def main():
     allm = cv2.dilate(allm, np.ones((k, k), np.uint8))
     sk = thin((allm > 0).astype(np.uint8))
 
+    emit(sk, out_json, out_png)
+
+
+def emit(sk, out_json, out_png):
     strokes = []
     for line in chains(sk):
         if len(line) < 14:
