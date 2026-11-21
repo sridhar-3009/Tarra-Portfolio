@@ -53,6 +53,7 @@ function buildPath(root) {
 
   const strokes = []
   let cur = []
+  let intro = null // where the hero drawing ends: { stroke, point }
   let fine = false // portrait detail strokes use a finer pen
   const go = (...pts) => cur.push(...pts.map(([x, y]) => [clampX(x), y]))
   const lift = () => {
@@ -115,6 +116,7 @@ function buildPath(root) {
     const gap = (fig.r + lead.x) / 2
     go([gap - 6, fig.b - 30], [gap, lead.b + 40])
     underline()
+    intro = { stroke: strokes.length, point: cur.length - 1 }
     go([lead.r + 60, lead.y + lead.h * 0.2], [R, lead.y + lead.h * 0.5])
   } else {
     if (lead) {
@@ -124,6 +126,7 @@ function buildPath(root) {
     if (fig) {
       go([R, lead ? lead.b + 30 : fig.y - 60], [R, fig.y - 30], [fig.x + fig.w * 0.25, fig.y - 16])
       sketch()
+      intro = { stroke: strokes.length, point: 0 }
       go([R, fig.b + 10])
     }
   }
@@ -190,7 +193,10 @@ function buildPath(root) {
   }
   lift()
 
-  return strokes.map(({ pts, fine: f }) => ({ d: smooth(pts), pts, fine: f }))
+  return {
+    strokes: strokes.map(({ pts, fine: f }) => ({ d: smooth(pts), pts, fine: f })),
+    intro,
+  }
 }
 
 export default function ScrollLine({ rootRef }) {
@@ -212,6 +218,7 @@ export default function ScrollLine({ rootRef }) {
     let total = 0
     let samples = [] // [length along the whole line, cumulative max y]
     let drawn = 0
+    let introLen = 0 // the portrait and name underline always finish on load
     let raf = 0
 
     const pointAt = (l) => {
@@ -238,8 +245,10 @@ export default function ScrollLine({ rootRef }) {
       strokes = []
       total = 0
       samples = []
+      introLen = 0
       let maxY = -Infinity
-      buildPath(root).forEach(({ d, pts, fine }) => {
+      const built = buildPath(root)
+      built.strokes.forEach(({ d, pts, fine }, si) => {
         if (!d) return
         const el = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         el.setAttribute('d', d)
@@ -258,6 +267,9 @@ export default function ScrollLine({ rootRef }) {
           maxY = Math.max(maxY, p[1])
           samples.push([total + (seg[i] / poly) * len, maxY])
         })
+        if (built.intro && built.intro.stroke === si) {
+          introLen = total + (seg[Math.min(built.intro.point, seg.length - 1)] / poly) * len
+        }
         total += len
       })
       drawn = Math.min(drawn, total)
@@ -275,6 +287,9 @@ export default function ScrollLine({ rootRef }) {
       let hi = samples.length - 1
       if (hi < 0) return 0
       if (samples[hi][1] <= edge) return total
+      return Math.max(introLen, byScroll(edge, lo, hi))
+    }
+    const byScroll = (edge, lo, hi) => {
       while (lo < hi) {
         const mid = (lo + hi) >> 1
         if (samples[mid][1] <= edge) lo = mid + 1
@@ -316,7 +331,7 @@ export default function ScrollLine({ rootRef }) {
           return
         }
         // Ease toward the target, but never faster than a quick pen.
-        drawn += Math.sign(diff) * Math.min(Math.abs(diff) * 0.12 + 2, 46)
+        drawn += Math.sign(diff) * Math.min(Math.abs(diff) * 0.12 + 2, 64)
         paint()
         raf = requestAnimationFrame(step)
       }

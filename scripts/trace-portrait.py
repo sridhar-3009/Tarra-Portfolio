@@ -11,8 +11,12 @@ usage:
   SEEDS    optional boxes marking person ("fg"/"pfg") and background
            ("bg"/"pbg") in photo pixels, to guide the cut-out
   EPS      simplification tolerance (default 2.2); MINLEN drops short strokes
+  SMOOTH   bilateral passes before edge finding (more = fewer, cleaner lines)
+  MERGE    dilation size that merges double edges into one line
+  MINSPAN  drops specks smaller than this many output pixels
 
-The current drawing used: crop 791 0 1699 1226, Canny 20 55, the seeds file.
+The current drawing used: crop 791 0 1699 1226, Canny 15 45, the seeds file,
+and SMOOTH=1 MERGE=5 MINLEN=16 EPS=2.2 MINSPAN=10.
 """
 import json
 import sys
@@ -24,6 +28,22 @@ OUT_W, OUT_H = 400, 540
 WORK = 2  # trace at 2x the output size
 import os
 SEEDS = os.environ.get('SEEDS')
+
+
+def chaikin(pts, rounds=2):
+    """Corner-cutting so traced polylines read as smooth pen strokes."""
+    pts = np.asarray(pts, np.float32)
+    for _ in range(rounds):
+        if len(pts) < 3:
+            break
+        q = 0.75 * pts[:-1] + 0.25 * pts[1:]
+        r = 0.25 * pts[:-1] + 0.75 * pts[1:]
+        mid = np.empty((2 * len(q), 2), np.float32)
+        mid[0::2], mid[1::2] = q, r
+        pts = np.vstack([pts[:1], mid, pts[-1:]])
+    # keep the point count modest
+    step = max(1, len(pts) // 40)
+    return np.vstack([pts[::step], pts[-1:]]) if len(pts) > 2 else pts
 
 
 def thin(img):
@@ -127,8 +147,10 @@ def main():
 
     # 2. Inner feature lines: soft-edged Canny inside the person.
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    gray = cv2.bilateralFilter(gray, 9, 40, 9)
-    gray = cv2.GaussianBlur(gray, (5, 5), 0)
+    # Flatten skin texture and stubble so only the strong features survive.
+    for _ in range(int(os.environ.get('SMOOTH', 2))):
+        gray = cv2.bilateralFilter(gray, 11, 60, 11)
+    gray = cv2.GaussianBlur(gray, (7, 7), 0)
     edges = cv2.Canny(gray, float(sys.argv[8]) if len(sys.argv) > 8 else 30, float(sys.argv[9]) if len(sys.argv) > 9 else 80)
     inner = cv2.erode(person, np.ones((15, 15), np.uint8))
     edges = cv2.bitwise_and(edges, inner)
@@ -138,7 +160,9 @@ def main():
     outline[:4, :] = 0
     outline[-4:, :] = 0
     allm = cv2.bitwise_or(edges, outline)
-    allm = cv2.dilate(allm, np.ones((3, 3), np.uint8))
+    # Fatten before thinning so double edges (brows, lids) merge into one line.
+    k = int(os.environ.get('MERGE', 5))
+    allm = cv2.dilate(allm, np.ones((k, k), np.uint8))
     sk = thin((allm > 0).astype(np.uint8))
 
     strokes = []
@@ -152,7 +176,10 @@ def main():
         length = float(np.sum(np.hypot(*np.diff(simp, axis=0).T)))
         if length < float(os.environ.get('MINLEN', 14)):
             continue
-        strokes.append([[round(float(x), 1), round(float(y), 1)] for x, y in simp])
+        xs, ys = simp[:, 0], simp[:, 1]
+        if max(xs.max() - xs.min(), ys.max() - ys.min()) < float(os.environ.get('MINSPAN', 12)):
+            continue  # little blobs and specks
+        strokes.append([[round(float(x), 1), round(float(y), 1)] for x, y in chaikin(simp)])
 
     # Draw roughly top to bottom, each stroke starting at its upper end.
     for s in strokes:
