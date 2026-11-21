@@ -64,7 +64,7 @@ export default function Home() {
           <div
             data-line="portrait"
             role="img"
-            aria-label="A line doodle of a person in glasses behind a laptop"
+            aria-label="A line drawing of Sai"
             className="order-2 mx-auto aspect-[400/540] w-full max-w-[17rem] md:order-1 md:max-w-none"
           />
           <div className="order-1 md:order-2">

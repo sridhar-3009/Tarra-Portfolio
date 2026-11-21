@@ -183,7 +183,7 @@ function buildPath(root) {
   }
   lift()
 
-  return strokes.map(smooth)
+  return strokes.map((pts) => ({ d: smooth(pts), pts }))
 }
 
 export default function ScrollLine({ rootRef }) {
@@ -215,9 +215,14 @@ export default function ScrollLine({ rootRef }) {
       return last.el.getPointAtLength(last.len)
     }
 
+    let lastKey = ''
     const rebuild = () => {
       const W = root.clientWidth
       const H = root.scrollHeight
+      const key = `${W}x${H}`
+      if (key === lastKey) return
+      lastKey = key
+      const t0 = performance.now()
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
       svg.style.width = `${W}px`
       svg.style.height = `${H}px`
@@ -225,7 +230,9 @@ export default function ScrollLine({ rootRef }) {
       group.replaceChildren()
       strokes = []
       total = 0
-      buildPath(root).forEach((d) => {
+      samples = []
+      let maxY = -Infinity
+      buildPath(root).forEach(({ d, pts }) => {
         if (!d) return
         const el = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         el.setAttribute('d', d)
@@ -233,18 +240,22 @@ export default function ScrollLine({ rootRef }) {
         const len = el.getTotalLength()
         el.style.strokeDasharray = `${len} ${len}`
         strokes.push({ el, start: total, len })
+
+        // Map scroll depth to line length using the stroke's own points:
+        // asking the browser for points along a long path is very slow.
+        let run = 0
+        const seg = pts.map((p, i) => (i ? (run += Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1])) : 0))
+        const poly = run || 1
+        pts.forEach((p, i) => {
+          maxY = Math.max(maxY, p[1])
+          samples.push([total + (seg[i] / poly) * len, maxY])
+        })
         total += len
       })
-
-      samples = []
-      let maxY = -Infinity
-      for (let l = 0; l <= total; l += 6) {
-        maxY = Math.max(maxY, pointAt(l).y)
-        samples.push([l, maxY])
-      }
       drawn = Math.min(drawn, total)
       paint()
       tick()
+      if (import.meta.env.DEV) console.debug('scroll line built in', (performance.now() - t0).toFixed(1), 'ms')
     }
 
     // How much of the line should show for the current scroll position:
