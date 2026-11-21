@@ -7,7 +7,7 @@ export const personal = {
   location: 'Edinburgh, UK',
   github: 'https://github.com/sridhar-3009',
   linkedin: 'https://www.linkedin.com/in/sai-sridhar-tarra-2a77561a2/',
-  twitter: 'https://x.com/sridhar_3009',
+  twitter: 'https://x.com/partial_diffe',
   resume: '/resume.pdf',
   // Calendly / Cal.com / Topmate link for the Book a Call section; falls back to email when null
   bookingUrl: 'https://topmate.io/tarra/2381114?utm_source=portfolio',
