@@ -53,8 +53,12 @@ function buildPath(root) {
 
   const strokes = []
   let cur = []
+  let fine = false // portrait detail strokes use a finer pen
   const go = (...pts) => cur.push(...pts.map(([x, y]) => [clampX(x), y]))
-  const lift = () => { if (cur.length) strokes.push(cur); cur = [] }
+  const lift = () => {
+    if (cur.length) strokes.push({ pts: cur, fine })
+    cur = []
+  }
 
   // Loose hand-drawn ellipse around a box, overshooting a little.
   const circle = (b, { padX = 18, padY = 14, turns = 1.12, start = -2.6 } = {}) => {
@@ -92,11 +96,14 @@ function buildPath(root) {
   // pen like a real sketch.
   const sketch = () => {
     const s = fig.w / FIGURE_W
-    const tf = ([x, y]) => [fig.x + x * s + j(1.5), fig.y + y * s + j(1.5)]
+    const tf = ([x, y]) => [fig.x + x * s, fig.y + y * s]
     figureStrokes.forEach((stroke, i) => {
       if (i > 0) lift()
+      fine = i > 0
       stroke.map(tf).forEach((p) => cur.push(p))
     })
+    lift()
+    fine = false
   }
 
   // 1–2. Desktop: the doodle sits left of the name, so draw it first, then
@@ -104,8 +111,9 @@ function buildPath(root) {
   if (fig && lead && fig.y < lead.y + lead.h && fig.r < lead.x + 20) {
     go([fig.x + fig.w * 0.15, -40], [fig.x + fig.w * 0.2, fig.y - 10])
     sketch()
-    const e = cur[cur.length - 1]
-    go([e[0] + 40, e[1] - 40])
+    // Leave the drawing through the gap between the columns, not across it.
+    const gap = (fig.r + lead.x) / 2
+    go([gap - 6, fig.b - 30], [gap, lead.b + 40])
     underline()
     go([lead.r + 60, lead.y + lead.h * 0.2], [R, lead.y + lead.h * 0.5])
   } else {
@@ -116,8 +124,7 @@ function buildPath(root) {
     if (fig) {
       go([R, lead ? lead.b + 30 : fig.y - 60], [R, fig.y - 30], [fig.x + fig.w * 0.25, fig.y - 16])
       sketch()
-      const e = cur[cur.length - 1]
-      go([e[0] + 30, e[1] + 50])
+      go([R, fig.b + 10])
     }
   }
 
@@ -183,7 +190,7 @@ function buildPath(root) {
   }
   lift()
 
-  return strokes.map((pts) => ({ d: smooth(pts), pts }))
+  return strokes.map(({ pts, fine: f }) => ({ d: smooth(pts), pts, fine: f }))
 }
 
 export default function ScrollLine({ rootRef }) {
@@ -232,10 +239,11 @@ export default function ScrollLine({ rootRef }) {
       total = 0
       samples = []
       let maxY = -Infinity
-      buildPath(root).forEach(({ d, pts }) => {
+      buildPath(root).forEach(({ d, pts, fine }) => {
         if (!d) return
         const el = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         el.setAttribute('d', d)
+        if (fine) el.setAttribute('stroke-width', '2.2')
         group.appendChild(el)
         const len = el.getTotalLength()
         el.style.strokeDasharray = `${len} ${len}`
