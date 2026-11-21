@@ -1,8 +1,7 @@
-import { useState, Suspense, lazy } from 'react'
+import { Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Layout from './components/layout/Layout'
-import LoadingScreen from './components/ui/LoadingScreen'
 import ScrollToTop from './components/utils/ScrollToTop'
 
 // Lazy loaded pages
@@ -13,6 +12,7 @@ const ReelLinksPage = lazy(() => import('./pages/ReelLinksPage'))
 const ReelLinkDetailPage = lazy(() => import('./pages/ReelLinkDetailPage'))
 const VideosPage = lazy(() => import('./pages/VideosPage'))
 const AgentSkillsPage = lazy(() => import('./pages/AgentSkillsPage'))
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 function PageTransition({ children }) {
@@ -95,6 +95,14 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/projects"
+          element={
+            <PageTransition>
+              <ProjectsPage />
+            </PageTransition>
+          }
+        />
+        <Route
           path="/agent-skills"
           element={
             <PageTransition>
@@ -116,12 +124,8 @@ function AppRoutes() {
 }
 
 export default function App() {
-  const [loaded, setLoaded] = useState(false)
-
   return (
     <>
-      {!loaded && <LoadingScreen onComplete={() => setLoaded(true)} />}
-
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ScrollToTop />
         <Layout>

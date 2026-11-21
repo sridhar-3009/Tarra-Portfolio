@@ -9,7 +9,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'dark'
+    try {
+      const saved = localStorage.getItem('theme')
+      if (saved) return saved
+    } catch {}
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   })
 
   useEffect(() => {
@@ -29,7 +33,7 @@ export default function Navbar() {
       root.classList.remove('dark')
       root.classList.add('light')
     }
-    localStorage.setItem('theme', theme)
+    try { localStorage.setItem('theme', theme) } catch {}
   }, [theme])
 
   const toggleTheme = () => {
@@ -66,13 +70,13 @@ export default function Navbar() {
     { label: 'Home', href: '/' },
     { label: 'Projects', href: '/#projects' },
     { label: 'Experience', href: '/#experience' },
-    { label: 'Skills', href: '/#skills' },
+    { label: 'Photos', href: '/#photos' },
     { label: 'Articles', href: '/blog' },
     { label: 'Videos', href: '/videos' },
     { label: 'Code Drops', href: '/code-drops' },
     { label: 'Agent Skills', href: '/agent-skills' },
     { label: 'Book a Call', href: '/#book-a-call' },
-    { label: 'Contact', href: '/#contact' },
+    { label: 'Say hi', href: '/#contact' },
   ]
 
   return (

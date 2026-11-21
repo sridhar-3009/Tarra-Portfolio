@@ -8,6 +8,26 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Cream & cobalt palette: zinc/white/black map to CSS variables that
+        // switch between light and dark mode (see globals.css).
+        zinc: {
+          50: 'rgb(var(--z-50) / <alpha-value>)',
+          100: 'rgb(var(--z-100) / <alpha-value>)',
+          200: 'rgb(var(--z-200) / <alpha-value>)',
+          300: 'rgb(var(--z-300) / <alpha-value>)',
+          400: 'rgb(var(--z-400) / <alpha-value>)',
+          500: 'rgb(var(--z-500) / <alpha-value>)',
+          600: 'rgb(var(--z-600) / <alpha-value>)',
+          700: 'rgb(var(--z-700) / <alpha-value>)',
+          800: 'rgb(var(--z-800) / <alpha-value>)',
+          900: 'rgb(var(--z-900) / <alpha-value>)',
+          950: 'rgb(var(--z-950) / <alpha-value>)',
+        },
+        white: 'rgb(var(--c-white) / <alpha-value>)',
+        black: 'rgb(var(--c-black) / <alpha-value>)',
+        ink: 'rgb(var(--c-ink) / <alpha-value>)',
+        paper: 'rgb(var(--c-paper) / <alpha-value>)',
+        lavender: '#c8b5ff',
         dark: {
           DEFAULT: '#0D0D0D',
           50: '#141414',
@@ -45,8 +65,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['Satoshi', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Figtree', 'system-ui', 'sans-serif'],
+        display: ['Bricolage Grotesque', 'Figtree', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
       animation: {
