@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { figureStrokes, FIGURE_W } from './figure'
-// The portrait differs by theme: with a light beard in light mode,
-// clean-shaven in dark mode.
+// Same portrait in both themes; the dark-mode copy has smaller pupils so they
+// don't glow when the drawing is shown light-on-dark.
 import portraitLight from '../../assets/portrait/lines-light.png'
 import portraitDark from '../../assets/portrait/lines-dark.png'
 
