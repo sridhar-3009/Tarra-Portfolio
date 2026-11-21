@@ -230,9 +230,11 @@ export default function VideosPage() {
             <FiYoutube size={22} className="text-red-500" />
             <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest">YouTube</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-ink tracking-tight mb-3 relative inline-block">
-          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
-          <Bouncy text="Videos" />
+          <h1 className="text-3xl sm:text-4xl font-black text-ink tracking-tight mb-3">
+          <span className="relative inline-block">
+            <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+            <Bouncy text="Videos" />
+          </span>
         </h1>
           <p className="text-ink/70 text-base leading-relaxed max-w-xl">
             ML engineering, AI systems, open source projects, and everything in between.

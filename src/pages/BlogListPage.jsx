@@ -45,9 +45,11 @@ export default function BlogListPage() {
           <span>/</span>
           <span className="text-zinc-900 dark:text-white font-semibold">Articles</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white relative inline-block">
-          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
-          <Bouncy text="Articles & Technical Notes" />
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          <span className="relative inline-block">
+            <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+            <Bouncy text="Articles & Technical Notes" />
+          </span>
         </h1>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed font-normal">
           Deep dives into Machine Learning research, MLOps architecture, LLMs, and real-world software engineering challenges.
@@ -107,11 +109,11 @@ export default function BlogListPage() {
                   className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/90 hover:bg-zinc-50 dark:hover:bg-zinc-900/90 transition-all duration-300 shadow-sm flex flex-col justify-between space-y-3 block hover:-translate-y-1 hover:shadow-[0_14px_30px_-14px_rgb(var(--c-accent)/0.55)]"
                 >
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="whitespace-nowrap font-mono text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800">
                         {post.category}
                       </span>
-                      <div className="flex items-center gap-3 font-mono text-[11px] text-zinc-500">
+                      <div className="flex items-center gap-3 whitespace-nowrap font-mono text-[11px] text-zinc-500">
                         <span className="flex items-center gap-1">
                           <FiCalendar className="w-3 h-3 text-zinc-400" />
                           {formatDate(post.date)}
@@ -132,8 +134,8 @@ export default function BlogListPage() {
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-zinc-200 dark:border-zinc-900 flex items-center justify-between font-mono text-xs">
-                    <div className="flex flex-wrap gap-1.5">
+                  <div className="pt-3 border-t border-zinc-200 dark:border-zinc-900 flex items-center justify-between gap-3 font-mono text-xs">
+                    <div className="hidden sm:flex flex-wrap gap-1.5">
                       {post.tags?.slice(0, 3).map((t) => (
                         <span key={t} className="text-zinc-500">
                           #{t}
@@ -141,7 +143,7 @@ export default function BlogListPage() {
                       ))}
                     </div>
 
-                    <span className="font-semibold text-zinc-900 dark:text-white flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    <span className="ml-auto whitespace-nowrap font-semibold text-zinc-900 dark:text-white flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                       Read article <FiArrowRight className="w-3.5 h-3.5" />
                     </span>
                   </div>

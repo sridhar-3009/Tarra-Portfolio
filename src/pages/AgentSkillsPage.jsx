@@ -25,9 +25,11 @@ export default function AgentSkillsPage() {
           <span>/</span>
           <span className="text-zinc-900 dark:text-white font-semibold">Agent Skills</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white relative inline-block">
-          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
-          <Bouncy text="Agent Skills" />
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          <span className="relative inline-block">
+            <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+            <Bouncy text="Agent Skills" />
+          </span>
         </h1>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed font-normal">
           Skills I&apos;ve built for AI coding agents. They work with Claude Code, Cursor, and other agents that support the SKILL.md format.

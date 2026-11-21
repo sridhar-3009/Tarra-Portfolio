@@ -34,9 +34,11 @@ export default function ReelLinksPage() {
           <span>/</span>
           <span className="text-zinc-900 dark:text-white font-semibold">Code Drops</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white relative inline-block">
-          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
-          <Bouncy text="Code Drops & Snippets" />
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+          <span className="relative inline-block">
+            <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
+            <Bouncy text="Code Drops & Snippets" />
+          </span>
         </h1>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed font-normal">
           Quick links, gists, and GitHub repositories for code shared across reels, tutorials, and open source projects.

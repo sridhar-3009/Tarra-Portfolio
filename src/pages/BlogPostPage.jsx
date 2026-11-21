@@ -10,7 +10,7 @@ import { FiArrowLeft, FiCalendar, FiClock, FiTwitter, FiLinkedin, FiLink } from 
 import 'highlight.js/styles/github-dark.css'
 import { getPostBySlug } from '../blog'
 import { formatDate } from '../utils/blogUtils'
-import { Bouncy, Sparkle } from '../components/home/ui'
+import { Bouncy } from '../components/home/ui'
 
 export default function BlogPostPage() {
   const { slug } = useParams()
@@ -66,9 +66,10 @@ export default function BlogPostPage() {
 
       {/* Article Header */}
       <div className="space-y-3">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white leading-snug relative">
-          <Sparkle className="-left-5 -top-2 text-highlight" size={18} /><Sparkle className="-right-6 top-0 text-accent" size={13} delay={1.1} />
-          <Bouncy text={post.title} step={0.012} />
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white leading-snug">
+          <span className="relative inline-block">
+            <Bouncy text={post.title} step={0.012} />
+          </span>
         </h1>
 
         <div className="flex flex-wrap items-center gap-4 font-mono text-xs text-zinc-500 dark:text-zinc-400">
@@ -95,7 +96,7 @@ export default function BlogPostPage() {
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeSlug, rehypeHighlight]}
           >
-            {post.content}
+            {post.content.replace(/^\s*#\s+[^\n]*\n/, '')}
           </ReactMarkdown>
         </div>
       </div>

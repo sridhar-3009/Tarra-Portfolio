@@ -12,11 +12,13 @@ export default function NotFound() {
       </Helmet>
 
       <div className="space-y-2">
-        <Eyes className="mx-auto mb-2 w-24" />
-        <h1 className="relative inline-block font-display text-6xl sm:text-8xl font-extrabold text-ink">
-          <Sparkle className="-left-6 top-2 text-highlight" size={22} />
-          <Sparkle className="-right-7 top-6 text-accent" size={16} delay={1} />
-          <Bouncy text="404" step={0.12} />
+        <Eyes className="mx-auto mb-2 block w-24" />
+        <h1 className="font-display text-6xl sm:text-8xl font-extrabold text-ink">
+          <span className="relative inline-block">
+            <Sparkle className="-left-6 top-2 text-highlight" size={22} />
+            <Sparkle className="-right-7 top-6 text-accent" size={16} delay={1} />
+            <Bouncy text="404" step={0.12} />
+          </span>
         </h1>
         <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white">
           Lost in latent space. The eyes are looking for it too.
