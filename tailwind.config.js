@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Sky & peach palette: zinc/white/black map to CSS variables that
+        // Sunny palette: zinc/white/black map to CSS variables that
         // switch between light and dark mode (see globals.css).
         zinc: {
           50: 'rgb(var(--z-50) / <alpha-value>)',

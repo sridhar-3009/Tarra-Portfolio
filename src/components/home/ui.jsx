@@ -40,7 +40,7 @@ export function SectionTitle({ id, children, className = '' }) {
   )
 }
 
-// Pills fill with sky blue from the bottom on hover.
+// Pills fill with sunshine yellow from the bottom on hover.
 const pill =
   'relative isolate inline-flex items-center justify-center gap-1.5 overflow-hidden rounded-full border border-ink bg-paper px-6 pb-2 pt-[calc(0.5rem+1px)] font-display text-base font-semibold uppercase tracking-wide text-ink no-underline transition-[color,border-color,transform] duration-300 ease-out before:absolute before:inset-0 before:-z-10 before:translate-y-full before:rounded-full before:bg-highlight before:transition-transform before:duration-300 before:ease-out hover:-translate-y-0.5 hover:border-highlight hover:text-on-highlight hover:before:translate-y-0 focus-visible:border-highlight focus-visible:text-on-highlight focus-visible:before:translate-y-0 active:translate-y-0'
 
